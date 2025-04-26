@@ -2,29 +2,8 @@
 const CODIGO_SECRETO = "erickvip123";
 
 // ✅ Función que verifica si el usuario ha iniciado sesión (autenticado)
-function loginConGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-
-  firebase.auth().signInWithPopup(provider)
-    .then((result) => {
-      // Guardar que el usuario se ha registrado
-      localStorage.setItem("usuarioRegistrado", "true");
-
-      // ✅ Mostrar contenido sin necesidad de recargar
-      mostrarContenidoSiAutenticado();
-      mostrarTiempoRestante();
-
-      // ✅ Ocultar el botón de login
-      const botonLogin = document.getElementById("loginGoogle");
-      if (botonLogin) {
-        botonLogin.style.display = "none";
-      }
-
-      alert("Bienvenido " + result.user.displayName);
-    })
-    .catch((error) => {
-      console.error("Error al iniciar sesión:", error);
-    });
+function estaAutenticado() {
+  return localStorage.getItem("usuarioRegistrado") === "true";
 }
 
 // ✅ Función que verifica si el usuario ha ingresado el código Premium correctamente
@@ -48,23 +27,29 @@ function mostrarTiempoRestante() {
   const mensaje = document.getElementById("mensajePeriodoPrueba");
   if (!mensaje) return;
 
+  if (!estaAutenticado()) {
+    mensaje.innerText = "";
+    return;
+  }
+
   // Si tiene acceso Premium
   if (tieneCodigoPremium()) {
     mensaje.innerText = "🔓 Acceso Premium Activado.";
-    mensaje.style.color = "green";  // Cambiar color a verde si Premium
+    mensaje.style.color = "green";
     return;
   }
 
   const diasPrueba = 7;
-  const inicioPrueba = localStorage.getItem("inicioPrueba");
+  let inicioPrueba = localStorage.getItem("inicioPrueba");
 
-  if (!inicioPrueba) {
+  // ⚠️ Solo crear inicioPrueba si el usuario está autenticado
+  if (!inicioPrueba && estaAutenticado()) {
     const hoy = new Date().toISOString();
     localStorage.setItem("inicioPrueba", hoy);
-    mensaje.innerText = `🧪 Te quedan ${diasPrueba} días de prueba.`;
-    mensaje.style.color = "orange";  // Color naranja durante el periodo de prueba
-    return;
+    inicioPrueba = hoy;
   }
+
+  if (!inicioPrueba) return;
 
   const inicio = new Date(inicioPrueba);
   const hoy = new Date();
@@ -73,10 +58,10 @@ function mostrarTiempoRestante() {
 
   if (diasRestantes <= 0) {
     mensaje.innerText = "❌ Tu periodo de prueba ha terminado.";
-    mensaje.style.color = "red";  // Rojo cuando termina el periodo
+    mensaje.style.color = "red";
   } else {
     mensaje.innerText = `🧪 Te quedan ${diasRestantes} días de prueba.`;
-    mensaje.style.color = "orange";  // Naranja mientras queda tiempo
+    mensaje.style.color = "orange";
   }
 }
 
@@ -86,8 +71,14 @@ function activarPremiumConCodigo() {
   if (codigo === CODIGO_SECRETO) {
     localStorage.setItem("codigoPremium", codigo);
     alert("✅ Acceso Premium Activado");
+
+    // 🔄 Actualizar contenido al instante sin recargar
+    mostrarContenidoSiAutenticado();
     mostrarTiempoRestante();
-    mostrarContenidoSiAutenticado(); // Vuelve a mostrar el contenido
+
+    // Desactivar o ocultar el botón "Activar Premium con código"
+    const botonPremium = document.getElementById("botonPremium");
+    if (botonPremium) botonPremium.style.display = "none";  // Oculta el botón
   } else {
     alert("❌ Código incorrecto");
   }
@@ -97,16 +88,21 @@ function activarPremiumConCodigo() {
 function mostrarContenidoSiAutenticado() {
   const contenido = document.getElementById("contenidoApp");
   const mensajeBloqueo = document.getElementById("mensajeBloqueo");
+  const botonPremium = document.getElementById("botonPremium");
 
-  if (!contenido || !mensajeBloqueo) return;
+  if (!contenido || !mensajeBloqueo || !botonPremium) return;
 
+  // Si no está autenticado, ocultamos el contenido y mostramos el mensaje
   if (!estaAutenticado()) {
     contenido.style.display = "none";
-    mensajeBloqueo.innerText = "🔐 Debes iniciar sesión con Google para acceder al contenido.";
+    mensajeBloqueo.innerText = "🔐 Debes iniciar sesión con Google para acceder al contenido";
+    
+    // Aseguramos que el botón "Activar Premium con código" solo se muestra cuando está autenticado
+    botonPremium.style.display = "none"; // Ocultamos el botón si no está autenticado
     return;
   }
 
-  // Usuario autenticado: validamos si tiene permiso (prueba o premium)
+  // Si está autenticado, mostramos el contenido adecuado
   if (tieneCodigoPremium() || verificarSiEstaEnPeriodoDePrueba()) {
     contenido.style.display = "block";
     mensajeBloqueo.innerText = "";
@@ -114,15 +110,33 @@ function mostrarContenidoSiAutenticado() {
     contenido.style.display = "none";
     mensajeBloqueo.innerText = "⏳ Tu periodo de prueba ha terminado. Ingresa un código Premium.";
   }
+
+  // Si ya tiene el acceso Premium, ocultamos el botón
+  if (tieneCodigoPremium()) {
+    botonPremium.style.display = "none"; // Ocultamos el botón
+  } else {
+    botonPremium.style.display = "inline-block"; // Mostramos el botón si no tiene premium
+  }
 }
 
 // ✅ Al cargar la página, evaluamos el acceso y mostramos estado
 window.onload = () => {
-  // Verificar si el usuario está autenticado y mostrar el mensaje de prueba
   mostrarContenidoSiAutenticado();
 
-  // Llamamos a mostrarTiempoRestante solo si el usuario está autenticado
   if (estaAutenticado()) {
     mostrarTiempoRestante();
+  }
+
+  const botonLogin = document.getElementById("loginGoogle");
+  const botonPremium = document.getElementById("botonPremium");
+
+  // Ocultar el botón de login si el usuario ya está autenticado
+  if (estaAutenticado() && botonLogin) {
+    botonLogin.style.display = "none";
+  }
+
+  // Solo mostrar el botón Premium si el usuario está autenticado
+  if (estaAutenticado() && botonPremium) {
+    botonPremium.style.display = "inline-block";  // Mostrar el botón de premium solo si está autenticado
   }
 };

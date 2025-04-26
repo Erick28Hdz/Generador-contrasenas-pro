@@ -35,6 +35,20 @@ function iniciarSesionConGoogle() {
       localStorage.setItem("usuarioEmail", user.email);
       localStorage.setItem("usuarioNombre", user.displayName);
 
+      // 🟢 Crear fecha de inicio de prueba si es la primera vez
+      if (!localStorage.getItem("inicioPrueba")) {
+        const hoy = new Date().toISOString();
+        localStorage.setItem("inicioPrueba", hoy);
+      }
+
+      // ✅ Mostrar contenido autorizado y actualizar mensajes
+      mostrarContenidoSiAutenticado();
+      mostrarTiempoRestante();
+
+      // 🔒 Ocultar botón de login si ya inició sesión
+      const botonLogin = document.getElementById("loginGoogle");
+      if (botonLogin) botonLogin.style.display = "none";
+
       alert(`¡Bienvenido ${user.displayName}!`);
     })
     .catch((error) => {

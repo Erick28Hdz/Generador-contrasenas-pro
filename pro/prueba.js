@@ -2,8 +2,29 @@
 const CODIGO_SECRETO = "erickvip123";
 
 // ✅ Función que verifica si el usuario ha iniciado sesión (autenticado)
-function estaAutenticado() {
-  return localStorage.getItem("usuarioRegistrado") === "true";
+function loginConGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  firebase.auth().signInWithPopup(provider)
+    .then((result) => {
+      // Guardar que el usuario se ha registrado
+      localStorage.setItem("usuarioRegistrado", "true");
+
+      // ✅ Mostrar contenido sin necesidad de recargar
+      mostrarContenidoSiAutenticado();
+      mostrarTiempoRestante();
+
+      // ✅ Ocultar el botón de login
+      const botonLogin = document.getElementById("loginGoogle");
+      if (botonLogin) {
+        botonLogin.style.display = "none";
+      }
+
+      alert("Bienvenido " + result.user.displayName);
+    })
+    .catch((error) => {
+      console.error("Error al iniciar sesión:", error);
+    });
 }
 
 // ✅ Función que verifica si el usuario ha ingresado el código Premium correctamente
@@ -103,11 +124,5 @@ window.onload = () => {
   // Llamamos a mostrarTiempoRestante solo si el usuario está autenticado
   if (estaAutenticado()) {
     mostrarTiempoRestante();
-  }
-
-  // 🔐 Ocultar botón de login si ya está autenticado
-  const botonLogin = document.getElementById("loginGoogle");
-  if (estaAutenticado() && botonLogin) {
-    botonLogin.style.display = "none";
   }
 };

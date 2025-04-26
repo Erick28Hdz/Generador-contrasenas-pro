@@ -139,4 +139,9 @@ window.onload = () => {
   if (estaAutenticado() && botonPremium) {
     botonPremium.style.display = "inline-block";  // Mostrar el botón de premium solo si está autenticado
   }
+
+  // Si el usuario tiene el código Premium, ocultamos el botón
+  if (tieneCodigoPremium() && botonPremium) {
+    botonPremium.style.display = "none";
+  }
 };

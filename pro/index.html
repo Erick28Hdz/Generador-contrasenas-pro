@@ -8,13 +8,6 @@
   <!-- Configuración de la vista para dispositivos móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Inclusión de las bibliotecas de Firebase (App, Auth y Analytics) -->
-  <!-- Firebase SDKs para navegador normal -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics-compat.js"></script>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
   <!-- Título de la pestaña del navegador -->
   <title>Generador Contraseñas Pro</title>
 
@@ -81,6 +74,7 @@
         <div id="timer" style="color: darkred; font-weight: bold"></div>
 
         <!-- Botón para generar la contraseña -->
+        <input type="text" id="contraseña" placeholder="Escribe tu contraseña aquí" />
         <div class="buttons">
           <button onclick="generatePassword()">⚙️ Generar</button>
           <button onclick="clearPasswords()">🧹 Limpiar</button>
@@ -101,6 +95,9 @@
     <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
   </div>
 
+
+  <script src="https://apis.google.com/js/api.js"></script>
+
   <!-- Inclusión del script principal de la lógica de la app -->
   <script src="./main.js"></script>
 
@@ -111,6 +108,7 @@
   <script type="module" src="./auth.js"></script>
 
   <script src="./backup.js"></script>
+
 </body>
 
 </html>

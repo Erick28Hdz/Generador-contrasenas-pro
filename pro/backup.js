@@ -1,125 +1,133 @@
-// backup.js
-
-// ✅ Inicializar el cliente de Google (nuevo sistema)
-google.accounts.id.initialize({
-    client_id: '753138078000-57bk6n6sd2f62oemidl3rmuokgntloct.apps.googleusercontent.com',
-    callback: handleCredentialResponse
-});
-
-// ✅ Dibujar el botón de login de Google en un div
-google.accounts.id.renderButton(
-    document.getElementById('guardarContraseña'),
-    { theme: "outline", size: "large" }
-);
-
-function handleCredentialResponse(response) {
-    console.log('JWT ID Token:', response.credential);
-    // Aquí puedes enviarlo a tu backend o autenticar en Firebase
-}
-
-// ✅ Configurar el cliente de la API de Google con tus credenciales y permisos
-function initClient() {
-    gapi.client.init({
-        apiKey: 'AIzaSyCaE-jca1N5lxx7Uh1H7f3F6xTpUBV_vjQ',
-        clientId: '753138078000-57bk6n6sd2f62oemidl3rmuokgntloct.apps.googleusercontent.com',
-        discoveryDocs: [
-            'https://sheets.googleapis.com/$discovery/rest?version=v4',
-            'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
-        ],
-        scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file'
-    }).then(function () {
-        gapi.auth2.init().then(() => {
-            console.log('🔐 auth2 inicializado correctamente');
-            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        }).catch(error => {
-            console.error('❌ Error al inicializar auth2', error);
-        });
-    }).catch(error => {
-        console.error('❌ Error al inicializar gapi.client', error);
-    });
-}
-
-// ✅ Actualiza el comportamiento según si el usuario está autenticado o no
-function updateSigninStatus(isSignedIn) {
-    if (isSignedIn) {
-        console.log('✅ Usuario autenticado');
-    } else {
-        console.log('❌ Usuario no autenticado');
-        gapi.auth2.getAuthInstance().signIn();
+// Verifica si el usuario está autenticado y si el token es válido.
+function initGoogleAPI() {
+    const accessToken = localStorage.getItem("accessToken");
+  
+    if (!accessToken) {
+      console.error("❌ No se encontró accessToken.");
+      return;
     }
-}
-
-// ✅ Función que autentica al usuario y luego guarda los datos automáticamente
-function autenticarGoogle() {
-    const authInstance = gapi.auth2.getAuthInstance();
-    if (authInstance.isSignedIn.get()) {
-        console.log('✅ Ya estás autenticado en Google');
-        guardarEnGoogleDrive();
-    } else {
-        console.log('🔄 No estás autenticado en gapi, autenticando...');
-        authInstance.signIn().then(() => {
-            console.log('✅ Autenticación exitosa');
-            guardarEnGoogleDrive();
+  
+    // Inicializar la API de Google usando el token de acceso
+    gapi.load("client", () => {
+      gapi.client.init({
+        apiKey: "AIzaSyCaE-jca1N5lxx7Uh1H7f3F6xTpUBV_vjQ", // No es necesario si no lo usas
+        discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+      }).then(() => {
+        // Establecer el access token para autenticar todas las solicitudes
+        gapi.client.setToken({ access_token: accessToken });
+        console.log("✅ GAPI inicializado con accessToken");
+  
+        // Aquí puedes llamar a la función para cargar Drive u otras APIs si las necesitas
+        gapi.client.load("drive", "v3").then(() => {
+          console.log("Google Drive API cargada");
         }).catch((error) => {
-            console.error('❌ Error al autenticar', error);
+          console.error("❌ Error al cargar Google Drive API:", error);
         });
+  
+      }).catch((error) => {
+        console.error("❌ Error al inicializar GAPI:", error);
+      });
+    });
+  }
+  
+  // Función para crear una hoja de cálculo para un usuario
+  function crearHojaDeCalculoParaUsuario() {
+    const userEmail = localStorage.getItem("usuarioEmail");
+  
+    if (!userEmail) {
+      alert("Error: Usuario no autenticado.");
+      return;
     }
-}
-
-// ✅ Función para guardar datos en Google Sheets
-function guardarEnGoogleSheets() {
-    const sheetId = 'TU_ID_DE_HOJA_DE_CALCULO'; 
-    const range = 'Hoja1!A1'; 
-
-    const valores = [
-        ["Contraseña", "Fecha de Creación", "Fecha de Expiración"]
-    ];
-
-    const body = {
-        values: valores
-    };
-
-    const request = gapi.client.sheets.spreadsheets.values.update({
-        spreadsheetId: sheetId,
-        range: range,
-        valueInputOption: 'RAW',
-        resource: body
-    });
-
-    request.then((response) => {
-        console.log('📊 Datos guardados en Sheets:', response);
-    }, (error) => {
-        console.log('❌ Error al guardar en Sheets:', error);
-    });
-}
-
-// ✅ Función para guardar archivo en Google Drive
-function guardarEnGoogleDrive() {
+  
+    const nombreHoja = `${userEmail}-contraseñas`;
+  
     const fileMetadata = {
-        'name': 'contraseña.txt',
-        'mimeType': 'text/plain'
+      name: nombreHoja,
+      mimeType: "application/vnd.google-apps.spreadsheet",
     };
-
-    const media = {
-        mimeType: 'text/plain',
-        body: 'Contraseña Guardada'
+  
+    // Crear el archivo de Google Sheets en Google Drive
+    gapi.client.drive.files.create({
+      resource: fileMetadata,
+      fields: "id",
+    }).then((response) => {
+      const hojaId = response.result.id;
+      console.log("✅ Hoja de cálculo creada:", hojaId);
+  
+      // Guardar el ID de la hoja en el almacenamiento local
+      localStorage.setItem("hojaId", hojaId);
+      alert(`Hoja de cálculo creada con éxito para ${userEmail}`);
+    }).catch((error) => {
+      console.error("❌ Error al crear la hoja de cálculo:", error);
+      alert("Error al crear la hoja de cálculo");
+    });
+  }
+  
+  // Función para guardar una contraseña en la hoja de cálculo
+  function guardarContraseña() {
+    const hojaId = localStorage.getItem("hojaId");
+    const contraseña = document.getElementById("contraseña").value; // Contraseña del input
+  
+    if (!hojaId) {
+      alert("¡No se ha creado una hoja para este usuario!");
+      return;
+    }
+  
+    if (!contraseña) {
+      alert("Por favor, ingresa una contraseña para guardar.");
+      return;
+    }
+  
+    // Guardar la contraseña en Google Sheets
+    const values = [
+      [new Date().toISOString(), contraseña], // Fecha y contraseña
+    ];
+  
+    const body = {
+      values: values,
     };
-
-    const request = gapi.client.drive.files.create({
-        resource: fileMetadata,
-        media: media,
-        fields: 'id'
+  
+    gapi.client.sheets.spreadsheets.values.append({
+      spreadsheetId: hojaId,
+      range: "Sheet1!A:B", // Rango donde se guardarán los datos
+      valueInputOption: "RAW",
+      resource: body,
+    }).then((response) => {
+      console.log("✅ Contraseña guardada con éxito:", response);
+      alert("Contraseña guardada con éxito");
+    }).catch((error) => {
+      console.error("❌ Error al guardar la contraseña:", error);
+      alert("Error al guardar la contraseña");
     });
-
-    request.then((response) => {
-        console.log('📁 Archivo guardado en Drive con ID:', response.result.id);
-    }, (error) => {
-        console.log('❌ Error al guardar en Drive:', error);
+  }
+  
+  // Espera que el DOM esté listo para asociar eventos
+  document.addEventListener("DOMContentLoaded", () => {
+    const botonGuardarContraseña = document.getElementById("guardarContraseña");
+  
+    // Verificar si el usuario está autenticado
+    botonGuardarContraseña.addEventListener("click", () => {
+      const userEmail = localStorage.getItem("usuarioEmail");
+  
+      if (!userEmail) {
+        alert("¡Inicia sesión primero!");
+        return;
+      }
+  
+      // Si ya existe la hoja, no la creamos de nuevo
+      const hojaId = localStorage.getItem("hojaId");
+      if (!hojaId) {
+        // Si no existe, la creamos
+        crearHojaDeCalculoParaUsuario();
+      }
+  
+      // Guardar la contraseña en la hoja
+      guardarContraseña();
     });
-}
-
-// ✅ Asociar botón al proceso de autenticación y guardado
-document.getElementById('guardarContraseña').addEventListener('click', autenticarGoogle);
-
-
+  });
+  
+  // Esta función se ejecuta cuando el script de Google API es cargado
+  window.onload = function() {
+    initGoogleAPI();
+  };
+  

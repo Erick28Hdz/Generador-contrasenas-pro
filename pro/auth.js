@@ -1,103 +1,104 @@
-// Importación de módulos necesarios desde Firebase versión 9 modular
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged,
-} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+const CLIENT_ID = '481398224733-ui5jk0ke8bd303aaq1muml9ndn77ouka.apps.googleusercontent.com';
+const API_KEY = 'AIzaSyBCYaZfbQqP4QkS1HnwGEMwc-5J6pNG0kI';
+const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
-// Configuración del proyecto Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyCT_qP7Cn4NZhrpzxTNkJfORQdxvCsy4CI",
-  authDomain: "generador-f7f23.firebaseapp.com",
-  projectId: "generador-f7f23",
-  storageBucket: "generador-f7f23.firebasestorage.app",
-  messagingSenderId: "311864485931",
-  appId: "1:311864485931:web:c5e85328f5e5c684fc626e",
-  measurementId: "G-YW358XZY7C",
-};
+let tokenClient;
+let gapiInited = false;
+let gisInited = false;
 
-// Inicializa Firebase con la configuración
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+document.getElementById('authorize_button').style.visibility = 'hidden';
+document.getElementById('signout_button').style.visibility = 'hidden';
 
-// Configuración de Google Auth
-const googleProvider = new GoogleAuthProvider();
-
-// Agregar los scopes necesarios
-googleProvider.addScope('https://www.googleapis.com/auth/drive.file');
-googleProvider.addScope('https://www.googleapis.com/auth/spreadsheets');
-
-// Función para iniciar sesión con Google
-function iniciarSesionConGoogle() {
-  signInWithPopup(auth, googleProvider)
-    .then((result) => {
-      const user = result.user;
-      console.log("✅ Usuario autenticado:", user.displayName, user.email);
-
-      // 🟢 Guardar el accessToken además del email y nombre
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const accessToken = credential.accessToken;
-      localStorage.setItem('accessToken', accessToken);
-
-      // Guardar información básica del usuario
-      localStorage.setItem("usuarioRegistrado", "true");
-      localStorage.setItem("usuarioEmail", user.email);
-      localStorage.setItem("usuarioNombre", user.displayName);
-
-      // 🟢 Crear fecha de inicio de prueba si es la primera vez
-      if (!localStorage.getItem("inicioPrueba")) {
-        const hoy = new Date().toISOString();
-        localStorage.setItem("inicioPrueba", hoy);
-      }
-
-      // ✅ Mostrar contenido autorizado y actualizar mensajes
-      mostrarContenidoSiAutenticado();
-      mostrarTiempoRestante();
-
-      // 🔒 Ocultar botón de login si ya inició sesión
-      const botonLogin = document.getElementById("loginGoogle");
-      if (botonLogin) botonLogin.style.display = "none";
-
-      alert(`¡Bienvenido ${user.displayName}!`);
-    })
-    .catch((error) => {
-      console.error("❌ Error en login:", error.message);
-      alert("Error al iniciar sesión con Google");
-    });
+// Carga de la librería gapi
+function gapiLoaded() {
+    gapi.load('client', initializeGapiClient);
 }
 
-function inicializarGapiConAccessToken(accessToken) {
-  gapi.load('client:auth2', () => {
-    gapi.client.init({
-      apiKey: '', // si es necesario
-      discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-    }).then(() => {
-      gapi.client.setToken({ access_token: accessToken });
-      console.log("✅ GAPI inicializado con accessToken");
-
-      // Ahora puedes hacer llamadas a la API de Drive
-      crearHojaDeCalculoParaUsuario(); // Asegúrate de llamar la función aquí, después de la inicialización
-    }).catch((error) => {
-      console.error("❌ Error al inicializar GAPI:", error);
+// Inicializa cliente GAPI
+async function initializeGapiClient() {
+    await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [DISCOVERY_DOC],
     });
-  });
+    gapiInited = true;
+    maybeEnableButtons();
 }
-// Espera a que el DOM esté listo
-document.addEventListener("DOMContentLoaded", () => {
-  const botonGoogle = document.getElementById("loginGoogle");
 
-  if (botonGoogle) {
-    botonGoogle.addEventListener("click", iniciarSesionConGoogle);
-  }
+// Inicializa cliente Google Identity Services
+function gisLoaded() {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: '', // El callback se configura al hacer login
+    });
+    gisInited = true;
+    maybeEnableButtons();
+}
 
-  // Solo muestra mensaje en consola si hay sesión activa
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log(`👤 Sesión activa: ${user.displayName} (${user.email})`);
-    } else {
-      console.log("🔒 No hay usuario autenticado");
+// Habilitar botones si la librería GAPI y el servicio de identidad están listos
+function maybeEnableButtons() {
+    if (gapiInited && gisInited) {
+        const storedToken = localStorage.getItem('authToken');
+        if (storedToken) {
+            gapi.client.setToken({ access_token: storedToken });
+
+            // Verificar si el token es válido
+            gapi.client.sheets.spreadsheets.get({
+                spreadsheetId: 'fake_spreadsheet_id_to_test',
+            }).then(() => {
+                // No debería entrar aquí porque el ID es falso
+            }).catch((error) => {
+                if (error.status === 401 || error.status === 403) {
+                    console.log('Token expirado o inválido. Eliminando...');
+                    localStorage.removeItem('authToken');
+                }
+            });
+
+            document.getElementById('signout_button').style.visibility = 'visible';
+            document.getElementById('authorize_button').style.visibility = 'hidden';
+            checkIfSpreadsheetExists();
+        } else {
+            document.getElementById('authorize_button').style.visibility = 'visible';
+            document.getElementById('signout_button').style.visibility = 'hidden';
+        }
     }
-  });
-});
+}
+
+// Botón de autorización
+function handleAuthClick() {
+    tokenClient.callback = async (resp) => {
+        if (resp.error !== undefined) {
+            throw (resp);
+        }
+
+        // Guardar el token en localStorage
+        localStorage.setItem('authToken', resp.access_token);
+
+        document.getElementById('signout_button').style.visibility = 'visible';
+        document.getElementById('authorize_button').style.visibility = 'hidden';
+
+    };
+
+    if (gapi.client.getToken() === null) {
+        tokenClient.requestAccessToken({ prompt: 'consent' });
+    } else {
+        tokenClient.requestAccessToken({ prompt: '' });
+    }
+}
+
+// Botón de cerrar sesión
+function handleSignoutClick() {
+    const token = gapi.client.getToken();
+    if (token !== null) {
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('spreadsheetId'); // También limpiar el ID del spreadsheet
+    }
+
+    document.getElementById('content').innerText = '';
+    document.getElementById('authorize_button').style.visibility = 'visible';
+    document.getElementById('signout_button').style.visibility = 'hidden';
+}
+

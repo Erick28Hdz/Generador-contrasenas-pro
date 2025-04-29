@@ -4,16 +4,13 @@
 <head>
   <!-- Definición del juego de caracteres -->
   <meta charset="UTF-8" />
-
   <!-- Configuración de la vista para dispositivos móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <!-- Título de la pestaña del navegador -->
   <title>Generador Contraseñas Pro</title>
-
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <!-- Hoja de estilos CSS externa -->
   <link rel="stylesheet" href="style.css" />
-
   <!-- Ícono de la pestaña del navegador -->
   <link rel="icon" href="icon-256.png" />
 </head>
@@ -23,19 +20,15 @@
   <div class="container">
     <!-- Título principal de la aplicación -->
     <h1>🔐 Generador de Contraseñas (Versión Pro)</h1>
-
     <div id="mensajePeriodoPrueba"></div>
     <div id="mensajeBloqueo" style="color: red; margin-top: 1em;"></div>
-
     <!-- Sección del generador de contraseñas (inicialmente oculta hasta autenticación) -->
     <div id="contenidoApp">
-
       <!-- Campo para seleccionar la longitud de la contraseña -->
       <div class="field">
         <label for="length">Longitud:</label>
         <input type="number" id="length" min="8" max="64" value="16" />
       </div>
-
       <!-- Campo para seleccionar el tiempo de expiración de la contraseña -->
       <div class="field">
         <label for="expTime">🕒 Tiempo de vida:</label>
@@ -50,7 +43,6 @@
           <option value="525600">1 año</option>
         </select>
       </div>
-
       <!-- Opciones para incluir distintos tipos de caracteres -->
       <div class="checks">
         <label><input type="checkbox" id="uppercase" checked /> Mayúsculas</label>
@@ -59,7 +51,6 @@
         <label><input type="checkbox" id="symbols" /> Símbolos</label>
         <label><input type="checkbox" id="no-ambiguous" /> Evitar caracteres ambiguos</label>
       </div>
-
       <!-- Sección donde se mostrará la contraseña generada y botones de acción -->
       <div id="result-box">
         <p>Tu contraseña aparecerá aquí</p>
@@ -69,46 +60,39 @@
           <label><input type="checkbox" id="togglePassword" onchange="togglePasswordVisibility()"> Mostrar
             contraseña</label>
         </div>
-
         <!-- Temporizador para mostrar el tiempo restante antes de expiración -->
         <div id="timer" style="color: darkred; font-weight: bold"></div>
-
+        <input type="text" id="spreadsheetIdInput" placeholder="Pega tu ID aquí si ya tienes uno">
         <!-- Botón para generar la contraseña -->
-        <input type="text" id="contraseña" placeholder="Escribe tu contraseña aquí" />
+        
         <div class="buttons">
           <button onclick="generatePassword()">⚙️ Generar</button>
-          <button onclick="clearPasswords()">🧹 Limpiar</button>
+          <button id="cleanExpired">🧹 Limpiar</button>
           <button onclick="copyToClipboard()">📋 Copiar</button>
-          <button id="guardarContraseña">💾Guardar Contraseña</button>
+          <button id="saveButton">💾Guardar Contraseña</button>
         </div>
       </div>
       <br />
     </div>
-
-    <!-- Botón para iniciar sesión con cuenta de Google -->
-    <button id="loginGoogle">🔐 Iniciar sesión con Google</button>
-
+    <pre id="content" style="white-space: pre-wrap;"></pre>
+    <button id="authorize_button" onclick="handleAuthClick()">🔐 Iniciar sesión con Google</button>
+    <button id="signout_button" onclick="handleSignoutClick()"> 🔓 Cerrar sesión</button>
     <!-- Enlace a la versión demo de la aplicación -->
     <a href="../demo/index.html" class="btn-demo">🧪 Probar gratis</a>
-
+    
     <!-- Botón para activar acceso premium con un código especial -->
     <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
   </div>
 
-
-  <script src="https://apis.google.com/js/api.js"></script>
-
+  
   <!-- Inclusión del script principal de la lógica de la app -->
   <script src="./main.js"></script>
-
   <!-- Script con funcionalidades específicas para pruebas -->
-  <script src="./prueba.js"></script>
 
-  <!-- Módulo de autenticación de usuarios -->
-  <script type="module" src="./auth.js"></script>
-
-  <script src="./backup.js"></script>
-
+  <script src="./sheets.js"></script>
+  <script src="./auth.js"></script>
+  <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+  <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </body>
 
 </html>

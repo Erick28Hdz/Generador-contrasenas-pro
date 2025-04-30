@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const spreadsheetId = await ensureSpreadsheetExists();
 
         const length = document.getElementById('length').value;
-        const password = document.getElementById('result').innerText;
+        let password = document.getElementById('result').innerText;
         const keyword = prompt('📝 Escribe la palabra clave para recordar dónde usarás esta contraseña:');
 
         if (keyword === null || keyword.trim() === "") {
@@ -272,6 +272,22 @@ document.addEventListener('DOMContentLoaded', function () {
             hour12: false
         });
 
+        // ✅ 🔐 CIFRADO SI EL USUARIO LO ACTIVÓ
+        if (cifradoActivado) {
+            const clave = prompt("🔐 Introduce una clave para cifrar esta contraseña:");
+            if (!clave) {
+                alert("❌ No se puede cifrar sin clave.");
+                return;
+            }
+            try {
+                password = await cifrado.cifrarTexto(password, clave); // ← ahora sí funcionará
+            } catch (e) {
+                alert("❌ Error al cifrar la contraseña.");
+                console.error(e);
+                return;
+            }
+        }
+
         const lastSequenceNumber = await getLastSequenceNumber(spreadsheetId);
         const newSequenceNumber = lastSequenceNumber + 1;
 
@@ -290,3 +306,17 @@ document.addEventListener('DOMContentLoaded', function () {
         await deleteExpiredPasswords(spreadsheetId);
     });
 });
+
+
+async function obtenerContraseñasDesdeSheets(spreadsheetId, range = 'Hoja 1!A2:E') {
+    try {
+        const response = await gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: spreadsheetId,
+            range: range
+        });
+        return response.result.values || [];
+    } catch (error) {
+        console.error("❌ Error al leer Google Sheets:", error);
+        return [];
+    }
+}

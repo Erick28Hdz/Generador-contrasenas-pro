@@ -78,6 +78,9 @@ function handleAuthClick() {
         document.getElementById('signout_button').style.visibility = 'visible';
         document.getElementById('authorize_button').style.visibility = 'hidden';
 
+        // Llamar a desbloquear el contenido
+        desbloquearContenido();
+
     };
 
     if (gapi.client.getToken() === null) {
@@ -85,6 +88,8 @@ function handleAuthClick() {
     } else {
         tokenClient.requestAccessToken({ prompt: '' });
     }
+
+
 }
 
 // Botón de cerrar sesión
@@ -100,5 +105,27 @@ function handleSignoutClick() {
     document.getElementById('content').innerText = '';
     document.getElementById('authorize_button').style.visibility = 'visible';
     document.getElementById('signout_button').style.visibility = 'hidden';
+
+    // Limpiar mensajes de prueba y bloqueo
+    document.getElementById('mensajePeriodoPrueba').innerText = '';
+    document.getElementById('mensajeBloqueo').innerText = '';
+
+    // Llamar a la función para verificar la autenticación y actualizar la UI
+    verificarAutenticacion();
 }
 
+window.onload = () => {
+    verificarAutenticacion();
+    mostrarTiempoRestante();
+  };
+  
+  function verificarAutenticacion() {
+    const token = localStorage.getItem('authToken');
+    
+    if (token) {
+      desbloquearContenido();
+      mostrarTiempoRestante(); // Actualizar el estado de periodo de prueba
+    } else {
+      bloquearContenido();
+    }
+  }

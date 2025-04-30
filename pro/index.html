@@ -23,7 +23,7 @@
     <div id="mensajePeriodoPrueba"></div>
     <div id="mensajeBloqueo" style="color: red; margin-top: 1em;"></div>
     <!-- Sección del generador de contraseñas (inicialmente oculta hasta autenticación) -->
-    <div id="contenidoApp">
+    <div id="contenidoApp" style="display:none;">
       <!-- Campo para seleccionar la longitud de la contraseña -->
       <div class="field">
         <label for="length">Longitud:</label>
@@ -59,12 +59,16 @@
         <div class="field">
           <label><input type="checkbox" id="togglePassword" onchange="togglePasswordVisibility()"> Mostrar
             contraseña</label>
+          <label>
+            <input type="checkbox" id="togglePassword" onchange="toggleCifrado()">
+            Cifrar contraseña
+          </label>
         </div>
         <!-- Temporizador para mostrar el tiempo restante antes de expiración -->
         <div id="timer" style="color: darkred; font-weight: bold"></div>
         <input type="text" id="spreadsheetIdInput" placeholder="Pega tu ID aquí si ya tienes uno">
         <!-- Botón para generar la contraseña -->
-        
+
         <div class="buttons">
           <button onclick="generatePassword()">⚙️ Generar</button>
           <button id="cleanExpired">🧹 Limpiar</button>
@@ -73,22 +77,36 @@
         </div>
       </div>
       <br />
+      <!-- Botón para activar acceso premium con un código especial -->
+      <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
     </div>
     <pre id="content" style="white-space: pre-wrap;"></pre>
     <button id="authorize_button" onclick="handleAuthClick()">🔐 Iniciar sesión con Google</button>
     <button id="signout_button" onclick="handleSignoutClick()"> 🔓 Cerrar sesión</button>
-    <!-- Enlace a la versión demo de la aplicación -->
-    <a href="../demo/index.html" class="btn-demo">🧪 Probar gratis</a>
-    
-    <!-- Botón para activar acceso premium con un código especial -->
-    <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
+
+    <h2>📋 Contraseñas guardadas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Longitud</th>
+          <th>Expira</th>
+          <th>Palabra clave</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody id="tablaContraseñas"></tbody>
+    </table>
+    <button onclick="mostrarTablaContraseñas()">🔄 Cargar contraseñas</button>
+
   </div>
 
-  
+
   <!-- Inclusión del script principal de la lógica de la app -->
   <script src="./main.js"></script>
-  <!-- Script con funcionalidades específicas para pruebas -->
-
+  <script src="./bloqueo.js"></script>
+  <script src="./prueba.js"></script>
+  <script src="./cifrado.js"></script>
   <script src="./sheets.js"></script>
   <script src="./auth.js"></script>
   <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>

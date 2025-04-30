@@ -162,3 +162,40 @@ function togglePasswordVisibility() {
   const el = document.getElementById('result');
   el.style.filter = document.getElementById('togglePassword').checked ? 'none' : 'blur(5px)';
 }
+
+
+async function mostrarTablaContraseñas() {
+  const spreadsheetId = await ensureSpreadsheetExists();
+  const datos = await obtenerContraseñasDesdeSheets(spreadsheetId);
+
+  const tabla = document.getElementById('tablaContraseñas');
+  tabla.innerHTML = ''; // limpiar
+
+  datos.forEach((fila, index) => {
+      const [n, longitud, expira, contrasena, palabraClave] = fila;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+          <td>${n}</td>
+          <td>${longitud}</td>
+          <td>${expira}</td>
+          <td>${palabraClave}</td>
+          <td>
+              <button onclick="descifrarDesdeTabla('${contrasena}')">🔓 Ver</button>
+          </td>
+      `;
+      tabla.appendChild(tr);
+  });
+}
+
+async function descifrarDesdeTabla(contrasenaCifrada) {
+  const clave = prompt("Introduce la clave para descifrar:");
+  if (!clave) return;
+
+  try {
+      const texto = await cifrado.descifrarTexto(contrasenaCifrada, clave);
+      alert(`🔓 Contraseña: ${texto}`);
+  } catch (e) {
+      alert("❌ Clave incorrecta o formato inválido.");
+  }
+}

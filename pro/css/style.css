@@ -29,6 +29,7 @@ body {
 #mensajeBloqueo{
   margin-bottom: 20px;
 }
+
 /* ✅ Estilo del titúlo */
 h1,
 h2 {
@@ -80,6 +81,7 @@ label[for="expTime"] {
   flex-wrap: wrap;
   justify-content: space-evenly;
   gap: 5px;
+  align-items: center;
 }
 
 .opciones label {
@@ -88,13 +90,21 @@ label[for="expTime"] {
 
 /* ✅ Estilo longitud */
 input[type="number"] {
-  width: 30px;
-  height: 15px;
+  width: 40px;
+  height: 20px;
   padding-left: 5px;
   border: 1px solid var(--cuaternario-color);
   border-radius: 5px;
   background-color: var(--primario-color);
   color: var(--cuaternario-color);
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="number"]:focus {
+  border-color: var(--secundario-color);
+  box-shadow: 0 0 0 3px var(--primario-color);
+  outline: none;
 }
 
 /* ✅ Estilo del select */
@@ -113,7 +123,6 @@ select {
 .checkbox-container {
   position: relative;
   display: inline-block;
-  margin-bottom: 12px;
   cursor: pointer;
 }
 
@@ -186,13 +195,30 @@ select {
   flex-direction: column;
 }
 
+table{
+  margin-bottom: 15px;
+}
+
 .tabla-datos td {
   text-align: center;
 }
 
 #spreadsheetIdInput {
-  margin-top: 10px;
   height: 25px;
+  width: 40%;
+  padding-left: 5px;
+  border: 1px solid var(--cuaternario-color);
+  border-radius: 8px;
+  background-color: var(--primario-color);
+  color: var(--cuaternario-color);
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#spreadsheetIdInput:focus {
+  border-color: var(--secundario-color);
+  box-shadow: 0 0 0 3px var(--primario-color);
+  outline: none;
 }
 
 .buttons {
@@ -237,3 +263,5 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
+
+

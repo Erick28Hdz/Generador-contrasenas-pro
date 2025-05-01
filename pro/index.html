@@ -91,11 +91,11 @@
           <tbody id="tablaContraseñas"></tbody>
         </table>
         <div class="buttons">
+          <input type="text" id="spreadsheetIdInput" placeholder="Pega tu ID aquí si ya tienes uno">
           <button onclick="mostrarTablaContraseñas()">🔄 Cargar contraseñas</button>
           <button id="cleanExpired">🧹 Limpiar</button>
-          <input type="text" id="spreadsheetIdInput" placeholder="Pega tu ID aquí si ya tienes uno">
         </div>
-        <pre id="content" style="white-space: pre-wrap;"></pre>
+
       </div>
       <!-- Sección donde se mostrará la contraseña generada y botones de acción -->
       <div id="result-box">
@@ -120,7 +120,7 @@
           <button onclick="copyToClipboard()">📋 Copiar</button>
           <button id="saveButton">💾Guardar Contraseña</button>
         </div>
-
+        <pre id="content" style="white-space: pre-wrap;"></pre>
       </div>
       <br />
     </div>

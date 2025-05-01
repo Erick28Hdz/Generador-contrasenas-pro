@@ -10,9 +10,9 @@
   <title>Generador Contraseñas Pro</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <!-- Hoja de estilos CSS externa -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
   <!-- Ícono de la pestaña del navegador -->
-  <link rel="icon" href="icon-256.png" />
+  <link rel="icon" href="image/icon-256.png" />
 </head>
 
 <body>
@@ -20,95 +20,124 @@
   <div class="container">
     <!-- Título principal de la aplicación -->
     <h1>🔐 Generador de Contraseñas (Versión Pro)</h1>
-    <div id="mensajePeriodoPrueba"></div>
     <div id="mensajeBloqueo" style="color: red; margin-top: 1em;"></div>
     <!-- Sección del generador de contraseñas (inicialmente oculta hasta autenticación) -->
     <div id="contenidoApp" style="display:none;">
-      <!-- Campo para seleccionar la longitud de la contraseña -->
-      <div class="field">
-        <label for="length">Longitud:</label>
-        <input type="number" id="length" min="8" max="64" value="16" />
+      <div class="caducidad">
+        <div id="mensajePeriodoPrueba"></div>
+        <!-- Botón para activar acceso premium con un código especial -->
+        <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar
+          Premium con código</button>
       </div>
       <!-- Campo para seleccionar el tiempo de expiración de la contraseña -->
-      <div class="field">
-        <label for="expTime">🕒 Tiempo de vida:</label>
-        <select id="expTime">
-          <option value="0">Sin expiración</option>
-          <option value="1">1 minuto</option>
-          <option value="10">10 minutos</option>
-          <option value="60">1 hora</option>
-          <option value="720">12 horas</option>
-          <option value="1440">1 día</option>
-          <option value="10080">1 semana</option>
-          <option value="525600">1 año</option>
-        </select>
+      <div class="">
+        <div class="field">
+          <label for="expTime">🕒 Tiempo de expiración:</label>
+          <select id="expTime">
+            <option value="0">Sin expiración</option>
+            <option value="1">1 minuto</option>
+            <option value="10">10 minutos</option>
+            <option value="60">1 hora</option>
+            <option value="720">12 horas</option>
+            <option value="1440">1 día</option>
+            <option value="10080">1 semana</option>
+            <option value="525600">1 año</option>
+          </select>
+        </div>
+        <br>
+        <div class="opciones">
+          <label for="length">Longitud:</label>
+          <input type="number" id="length" min="8" max="64" value="16" />
+          <!-- Opciones para incluir distintos tipos de caracteres -->
+          <label class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="uppercase" />
+            <span class="checkmark"></span>
+            Mayúsculas
+          </label>
+          <label class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="lowercase" />
+            <span class="checkmark"></span>
+            Minúsculas
+          </label>
+          <label class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="numbers" />
+            <span class="checkmark"></span>
+            Números
+          </label>
+          <label class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="symbols" />
+            <span class="checkmark"></span>
+            Símbolos
+          </label>
+          <label class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="no-ambiguous" />
+            <span class="checkmark"></span>
+            Evitar caracteres ambiguos
+          </label>
+        </div>
       </div>
-      <!-- Opciones para incluir distintos tipos de caracteres -->
-      <div class="checks">
-        <label><input type="checkbox" id="uppercase" checked /> Mayúsculas</label>
-        <label><input type="checkbox" id="lowercase" checked /> Minúsculas</label>
-        <label><input type="checkbox" id="numbers" checked /> Números</label>
-        <label><input type="checkbox" id="symbols" /> Símbolos</label>
-        <label><input type="checkbox" id="no-ambiguous" /> Evitar caracteres ambiguos</label>
+      <div class="tabla-datos">
+        <h2>📋 Contraseñas guardadas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Longitud</th>
+              <th>Expira</th>
+              <th>Palabra clave</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaContraseñas"></tbody>
+        </table>
+        <div class="buttons">
+          <button onclick="mostrarTablaContraseñas()">🔄 Cargar contraseñas</button>
+          <button id="cleanExpired">🧹 Limpiar</button>
+          <input type="text" id="spreadsheetIdInput" placeholder="Pega tu ID aquí si ya tienes uno">
+        </div>
+        <pre id="content" style="white-space: pre-wrap;"></pre>
       </div>
       <!-- Sección donde se mostrará la contraseña generada y botones de acción -->
       <div id="result-box">
         <p>Tu contraseña aparecerá aquí</p>
         <div id="result" class="password-display"></div>
+        <br>
         <!-- Mostrar/ocultar contraseña -->
-        <div class="field">
-          <label><input type="checkbox" id="togglePassword" onchange="togglePasswordVisibility()"> Mostrar
-            contraseña</label>
-          <label>
-            <input type="checkbox" id="togglePassword" onchange="toggleCifrado()">
-            Cifrar contraseña
+        <div class="opciones">
+          <label class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="togglePassword" onchange="togglePasswordVisibility()" />
+            <span class="checkmark"></span>
+            Mostrar
+            contraseña
           </label>
         </div>
         <!-- Temporizador para mostrar el tiempo restante antes de expiración -->
-        <div id="timer" style="color: darkred; font-weight: bold"></div>
-        <input type="text" id="spreadsheetIdInput" placeholder="Pega tu ID aquí si ya tienes uno">
-        <!-- Botón para generar la contraseña -->
+        <div id="timer" style="color: cyan; font-weight: bold"></div>
 
+        <!-- Botones para generar la contraseña -->
         <div class="buttons">
           <button onclick="generatePassword()">⚙️ Generar</button>
-          <button id="cleanExpired">🧹 Limpiar</button>
           <button onclick="copyToClipboard()">📋 Copiar</button>
           <button id="saveButton">💾Guardar Contraseña</button>
         </div>
+
       </div>
       <br />
-      <!-- Botón para activar acceso premium con un código especial -->
-      <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
     </div>
-    <pre id="content" style="white-space: pre-wrap;"></pre>
-    <button id="authorize_button" onclick="handleAuthClick()">🔐 Iniciar sesión con Google</button>
-    <button id="signout_button" onclick="handleSignoutClick()"> 🔓 Cerrar sesión</button>
-
-    <h2>📋 Contraseñas guardadas</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Longitud</th>
-          <th>Expira</th>
-          <th>Palabra clave</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody id="tablaContraseñas"></tbody>
-    </table>
-    <button onclick="mostrarTablaContraseñas()">🔄 Cargar contraseñas</button>
-
+    <div class="buttons">
+      <button id="authorize_button" onclick="handleAuthClick()">🔐 Iniciar sesión con Google</button>
+      <button id="signout_button" onclick="handleSignoutClick()"> 🔓 Cerrar sesión</button>
+    </div>
   </div>
 
 
   <!-- Inclusión del script principal de la lógica de la app -->
-  <script src="./main.js"></script>
-  <script src="./bloqueo.js"></script>
-  <script src="./prueba.js"></script>
-  <script src="./cifrado.js"></script>
-  <script src="./sheets.js"></script>
-  <script src="./auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/bloqueo.js"></script>
+  <script src="js/prueba.js"></script>
+  <script src="js/cifrado.js"></script>
+  <script src="js/sheets.js"></script>
+  <script src="js/auth.js"></script>
   <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
   <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </body>

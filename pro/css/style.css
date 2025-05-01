@@ -1,0 +1,239 @@
+:root {
+  --primario-color: #131010;
+  --secundario-color: #123458;
+  --terciario-color: #030303;
+  --cuaternario-color: #D4C9BE;
+  --color-letra: #F1EFEC;
+}
+
+/* ✅ Estilo del body */
+body {
+  background: var(--primario-color);
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* ✅ Estilo del contenedor */
+.container {
+  font-family: Arial, sans-serif;
+  background: var(--terciario-color);
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px var(--cuaternario-color);
+  max-width: 500px;
+  width: 100%;
+  color: var(--color-letra);
+}
+
+#mensajeBloqueo{
+  margin-bottom: 20px;
+}
+/* ✅ Estilo del titúlo */
+h1,
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* ✅ Estilo de la caducidad */
+.caducidad {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* ✅ Estilo tiempo expiración */
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+label[for="expTime"] {
+  font-weight: bold;
+  display: block;
+}
+
+#expTime {
+  width: 50%;
+  padding: 8px 14px;
+  border: 1px solid var(--cuaternario-color);
+  border-radius: 8px;
+  background-color: var(--primario-color);
+  appearance: none;
+  color: var(--cuaternario-color);
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+#expTime:focus {
+  border-color: var(--secundario-color);
+  box-shadow: 0 0 0 3px var(--primario-color);
+  outline: none;
+}
+
+.opciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 5px;
+}
+
+.opciones label {
+  font-size: 15px;
+}
+
+/* ✅ Estilo longitud */
+input[type="number"] {
+  width: 30px;
+  height: 15px;
+  padding-left: 5px;
+  border: 1px solid var(--cuaternario-color);
+  border-radius: 5px;
+  background-color: var(--primario-color);
+  color: var(--cuaternario-color);
+}
+
+/* ✅ Estilo del select */
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--secundario-color);
+  background-color: white;
+  color: var(--primario-color);
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+/* ✅ Estilo de los checkbox */
+.checkbox-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  border: 2px solid var(--primario-color);
+  border-radius: 6px;
+  background-color: var(--cuaternario-color);
+  transition: all 0.3s ease;
+}
+
+.checkbox-container input:checked~.checkmark:after {
+  display: block;
+  animation: checkboxExpand 0.3s ease forwards, glowEffect 1s infinite alternate;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  width: 6px;
+  height: 12px;
+  border: solid #000;
+  border-width: 0 3px 3px 0;
+}
+
+.checkbox-container input:checked~.checkmark {
+  background-color: var(--secundario-color);
+  border-color: var(--primario-color);
+}
+
+.checkbox-container input:checked~.checkmark:after {
+  border-color: #000;
+}
+
+.checkbox-container:hover .checkmark {
+  box-shadow: 0 0 10px var(--primario-color);
+}
+
+@keyframes checkboxExpand {
+  0% {
+    transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+}
+
+@keyframes glowEffect {
+  0% {
+    box-shadow: 0 0 5px var(--secundario-color);
+  }
+
+  100% {
+    box-shadow: 0 0 20px var(--secundario-color), 0 0 40px var(--secundario-color), 0 0 60px var(--secundario-color);
+  }
+}
+
+/* ✅ Estilo de la tabla */
+.tabla-datos {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabla-datos td {
+  text-align: center;
+}
+
+#spreadsheetIdInput {
+  margin-top: 10px;
+  height: 25px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#content{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+}
+
+/* ✅ Estilo del resultado */
+#result-box {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--primario-color);
+  border-radius: 8px;
+  text-align: center;
+}
+
+#result{
+  color: var(--terciario-color);
+  font-size: 24px;
+  font-weight: 600;
+  text-shadow: 0px 0px 10px var(--color-letra);
+}
+
+#timer{
+  margin-bottom: 20px;
+}
+
+/* ✅ Estilo de los botones */
+button {
+  background-color: var(--secundario-color);
+  color: var(--color-letra);
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

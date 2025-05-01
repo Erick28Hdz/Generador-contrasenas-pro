@@ -11,7 +11,7 @@ async function createSpreadsheetAndHeaders() {
         // Mostrar ID en pantalla
         document.getElementById('content').innerHTML = `
             <p>📄 Nuevo documento creado:</p>
-            <a href="https://docs.google.com/spreadsheets/d/${spreadsheetId}" target="_blank">Ver Spreadsheet</a>
+            <a href="https://docs.google.com/spreadsheets/d/${spreadsheetId}" target="_blank">Ver archivo</a>
             <button onclick="copyToClipboard('${spreadsheetId}')">📋 Copiar ID</button>
         `;
 

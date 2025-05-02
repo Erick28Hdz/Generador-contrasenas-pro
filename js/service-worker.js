@@ -5,14 +5,14 @@ self.addEventListener('install', e => {
       return cache.addAll([
         'index.html',             // 📄 Página principal
         'css/style.css',          // 🎨 Estilos
-        'js/auth.js',             // ⚙️ Scripts JS
-        'js/main.js',
-        'js/bloqueo.js',
-        'js/cifrado.js',
-        'js/prueba.js',
-        'js/sheets.js',
-        'image/imagen1.png',      // 🖼️ Imágenes
-        'image/imagen2.png',
+        'auth.js',             // ⚙️ Scripts JS
+        'main.js',
+        'bloqueo.js',
+        'cifrado.js',
+        'prueba.js',
+        'sheets.js',
+        'imagen1.png',      // 🖼️ Imágenes
+        'imagen2.png',
         'manifest.json',          // 📜 Manifiesto (asegúrate de tenerlo en la raíz)
         'icon-256.png',           // 🖼️ Íconos (asegúrate de tenerlos en la raíz)
         'icon-512.png'

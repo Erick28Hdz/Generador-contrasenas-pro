@@ -10,8 +10,14 @@
   <title>Generador Contraseñas Pro</title>
   <!-- Hoja de estilos CSS externa -->
   <link rel="stylesheet" href="css/style.css" />
+  <!-- Archivo manifest -->
+  <link rel="manifest" href="/js/manifest.json" />
+  <!-- Color de la barra de herramientas (opcional pero recomendado para PWA) -->
+  <meta name="theme-color" content="#4a90e2" />
   <!-- Ícono de la pestaña del navegador -->
-  <link rel="icon" href="image/icon-256.png" />
+  <link rel="icon" href="image/icon-256.png" sizes="256x256" type="image/png" />
+  <!-- Íconos para dispositivos Apple -->
+  <link rel="apple-touch-icon" href="image/icon-256.png" sizes="256x256" type="image/png" />
 </head>
 
 <body>
@@ -126,7 +132,7 @@
       <button id="signout_button" onclick="handleSignoutClick()">🔓 Cerrar sesión</button>
     </div>
   </div>
-  
+
   <noscript>
     <div style="color: red; text-align: center;">Por favor, activa JavaScript para usar esta aplicación.</div>
   </noscript>
@@ -142,6 +148,18 @@
   <!-- Google API Scripts -->
   <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
   <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+
+  <!-- Registro del Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/js/service-worker.js')
+          .then(reg => console.log("✅ Service Worker registrado"))
+          .catch(err => console.error("❌ Error al registrar SW", err));
+      });
+    }
+  </script>
+
 </body>
 
 </html>

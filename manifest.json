@@ -1,7 +1,7 @@
 {
     "name": "Generador de Contraseñas pro",
     "short_name": "Generador",
-    "start_url": "/Generador-Contrasenas-pro/",
+    "start_url": "/Generador-contrasenas-pro/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#4a90e2",

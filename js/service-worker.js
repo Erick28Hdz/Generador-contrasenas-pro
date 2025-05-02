@@ -11,7 +11,7 @@ self.addEventListener('install', e => {
         '/Generador-contrasenas-pro/js/cifrado.js',
         '/Generador-contrasenas-pro/js/prueba.js',
         '/Generador-contrasenas-pro/js/sheets.js',
-        '/Generador-contrasenas-pro/js/manifest.json',
+        '/Generador-contrasenas-pro/manifest.json',
         '/Generador-contrasenas-pro/image/icon-256.png',
         '/Generador-contrasenas-pro/image/icon-512.png'
       ]);

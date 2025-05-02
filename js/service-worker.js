@@ -3,17 +3,17 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('pwacache').then(cache => {
       return cache.addAll([
-        'index.html',             // 📄 Página principal
-        '/css/style.css',          // 🎨 Estilos
-        '/js/auth.js',             // ⚙️ Scripts JS
-        '/js/main.js',
-        '/js/bloqueo.js',
-        '/js/cifrado.js',
-        '/js/prueba.js',
-        '/ja/sheets.js',
-        '/js/manifest.json',          // 📜 Manifiesto (asegúrate de tenerlo en la raíz)
-        '/image/icon-256.png',           // 🖼️ Íconos (asegúrate de tenerlos en la raíz)
-        '/image/icon-512.png'
+        '/Generador-contrasenas-pro/index.html',
+        '/Generador-contrasenas-pro/css/style.css',
+        '/Generador-contrasenas-pro/js/auth.js',
+        '/Generador-contrasenas-pro/js/main.js',
+        '/Generador-contrasenas-pro/js/bloqueo.js',
+        '/Generador-contrasenas-pro/js/cifrado.js',
+        '/Generador-contrasenas-pro/js/prueba.js',
+        '/Generador-contrasenas-pro/js/sheets.js',
+        '/Generador-contrasenas-pro/js/manifest.json',
+        '/Generador-contrasenas-pro/image/icon-256.png',
+        '/Generador-contrasenas-pro/image/icon-512.png'
       ]);
     })
   );

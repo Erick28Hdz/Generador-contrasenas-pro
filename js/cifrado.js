@@ -99,17 +99,17 @@ async function mostrarContrasenaGuardada(textoCifrado) {
     if (cifradoActivado) {
         const clave = prompt("🔓 Introduce la clave para descifrar:");
         if (!clave) {
-            alert("❌ Clave requerida.");
+            mostrarMensaje("❌ Clave requerida.");
             return;
         }
         try {
             const descifrada = await cifrado.descifrarTexto(textoCifrado, clave);
-            alert(`🔓 Contraseña: ${descifrada}`);
+            mostrarMensaje(`🔓 Contraseña: ${descifrada}`);
         } catch (err) {
-            alert("❌ Clave incorrecta o formato inválido.");
+            mostrarMensaje("❌ Clave incorrecta o formato inválido.");
         }
     } else {
-        alert(`🔐 Contraseña almacenada: ${textoCifrado}`);
+        mostrarMensaje(`🔐 Contraseña almacenada: ${textoCifrado}`);
     }
 }
 

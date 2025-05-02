@@ -73,7 +73,7 @@ function activarPremiumConCodigo() {
   const codigo = prompt("Introduce el código premium:");
   if (codigo === CODIGO_SECRETO) {
     localStorage.setItem("codigoPremium", codigo);
-    alert("✅ Acceso Premium Activado");
+    mostrarMensaje("✅ Acceso Premium Activado");
 
     // 🔄 Actualizar contenido al instante sin recargar
     mostrarTiempoRestante();
@@ -82,7 +82,7 @@ function activarPremiumConCodigo() {
     const botonPremium = document.getElementById("botonPremium");
     if (botonPremium) botonPremium.style.display = "none";  // Oculta el botón
   } else {
-    alert("❌ Código incorrecto");
+    mostrarMensaje("❌ Código incorrecto");
   }
 }
 

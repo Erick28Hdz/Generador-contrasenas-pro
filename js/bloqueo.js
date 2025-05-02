@@ -1,13 +1,13 @@
 // Función para verificar si el usuario está autenticado
 function verificarAutenticacion() {
-    const authToken = localStorage.getItem('authToken');
+    const authToken = localStorage.getItem('authToken'); // Obtener el token guardado en localStorage
 
     // Si el token existe, el usuario está autenticado
     if (authToken) {
-        desbloquearContenido();
-        mostrarTiempoRestante();
+        desbloquearContenido(); // Mostrar contenido protegido
+        mostrarTiempoRestante(); // Mostrar mensaje de periodo de prueba o acceso premium
     } else {
-        bloquearContenido();
+        bloquearContenido(); // Bloquear contenido si no hay token
     }
 }
 
@@ -22,9 +22,9 @@ function manejarInicioSesion(token) {
 
 // Función para mostrar contenido si el usuario está autenticado
 function mostrarContenido() {
-    const contenidoProtegido = document.getElementById('contenido_protegido');
+    const contenidoProtegido = document.getElementById('contenido_protegido'); // Obtener elemento del DOM
     if (contenidoProtegido) {
-        contenidoProtegido.style.display = 'block';
+        contenidoProtegido.style.display = 'block'; // Mostrar el contenido protegido
     }
 
     document.getElementById('mensaje_bloqueo').style.display = 'none'; // Ocultar mensaje de bloqueo
@@ -32,10 +32,10 @@ function mostrarContenido() {
 
 // Función para bloquear el contenido si el usuario no está autenticado
 function bloquearContenido() {
-    document.getElementById('mensajeBloqueo').innerHTML = '🔐 Debes iniciar sesión con Google para acceder al contenido';
-    document.getElementById('contenidoApp').style.display = 'none';
-    document.getElementById('authorize_button').style.visibility = 'visible';
-    document.getElementById('signout_button').style.visibility = 'hidden';
+    document.getElementById('mensajeBloqueo').innerHTML = '🔐 Debes iniciar sesión con Google para acceder al contenido'; // Mostrar mensaje de bloqueo
+    document.getElementById('contenidoApp').style.display = 'none'; // Ocultar contenido de la app
+    document.getElementById('authorize_button').style.visibility = 'visible'; // Mostrar botón de autorización
+    document.getElementById('signout_button').style.visibility = 'hidden'; // Ocultar botón de cerrar sesión
 
     // Limpiar el mensaje de periodo de prueba
     document.getElementById('mensajePeriodoPrueba').innerHTML = '';
@@ -43,10 +43,10 @@ function bloquearContenido() {
 
 // Función para desbloquear el contenido cuando el usuario está autenticado
 function desbloquearContenido() {
-    document.getElementById('mensajeBloqueo').innerHTML = '';
-    document.getElementById('contenidoApp').style.display = 'block';
-    document.getElementById('authorize_button').style.visibility = 'hidden';
-    document.getElementById('signout_button').style.visibility = 'visible';
+    document.getElementById('mensajeBloqueo').innerHTML = ''; // Limpiar mensaje de bloqueo
+    document.getElementById('contenidoApp').style.display = 'block'; // Mostrar contenido de la app
+    document.getElementById('authorize_button').style.visibility = 'hidden'; // Ocultar botón de autorización
+    document.getElementById('signout_button').style.visibility = 'visible'; // Mostrar botón de cerrar sesión
 
     // Mostrar el mensaje de periodo de prueba o acceso premium
     mostrarTiempoRestante();

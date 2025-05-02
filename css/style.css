@@ -1,43 +1,86 @@
+/* ============================================================
+   Variables globales (colores principales del sitio)
+   ============================================================ */
 :root {
   --primario-color: #131010;
+  /* Color principal (fondo oscuro) */
   --secundario-color: #123458;
+  /* Color secundario (botones, detalles) */
   --terciario-color: #030303;
+  /* Color terciario (contenedor principal) */
   --cuaternario-color: #D4C9BE;
+  /* Color claro para bordes, sombras */
   --color-letra: #F1EFEC;
+  /* Color principal de la letra */
 }
 
-/* ✅ Estilo del body */
+/* ============================================================
+     Estilos generales del body
+     ============================================================ */
 body {
   background: var(--primario-color);
+  /* Fondo general */
   display: flex;
+  /* Uso de flexbox para centrar */
   justify-content: center;
+  /* Centra horizontalmente */
   padding: 40px;
+  /* Espaciado interior */
 }
 
-/* ✅ Estilo del contenedor */
+/* ============================================================
+     Contenedor principal
+     ============================================================ */
 .container {
   font-family: Arial, sans-serif;
+  /* Fuente general */
   background: var(--terciario-color);
+  /* Fondo del contenedor */
   padding: 20px 30px;
+  /* Espaciado interior */
   border-radius: 12px;
+  /* Bordes redondeados */
   box-shadow: 0 4px 8px var(--cuaternario-color);
+  /* Sombra */
   max-width: 500px;
+  /* Ancho máximo */
   width: 100%;
+  /* Ocupa todo el ancho disponible */
   color: var(--color-letra);
+  /* Color del texto */
 }
 
-#mensajeBloqueo{
+/* Espaciado inferior para el mensaje de bloqueo */
+#mensajeBloqueo {
   margin-bottom: 20px;
 }
 
-/* ✅ Estilo del titúlo */
+#mensaje {
+  width: 30%;
+  background: var(--cuaternario-color);
+  color: var(--terciario-color);
+  padding: 20px;
+  position: fixed;
+  top: 50px;
+  border-radius: 5px;
+  z-index: 1000;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+/* ============================================================
+     Títulos h1 y h2
+     ============================================================ */
 h1,
 h2 {
   text-align: center;
+  /* Centrado del texto */
   margin-bottom: 20px;
+  /* Espacio inferior */
 }
 
-/* ✅ Estilo de la caducidad */
+/* ============================================================
+     Sección de caducidad
+     ============================================================ */
 .caducidad {
   display: flex;
   justify-content: space-around;
@@ -45,7 +88,9 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* ✅ Estilo tiempo expiración */
+/* ============================================================
+     Campo de expiración
+     ============================================================ */
 .field {
   display: flex;
   justify-content: space-between;
@@ -67,7 +112,6 @@ label[for="expTime"] {
   color: var(--cuaternario-color);
   cursor: pointer;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-
 }
 
 #expTime:focus {
@@ -76,6 +120,9 @@ label[for="expTime"] {
   outline: none;
 }
 
+/* ============================================================
+     Opciones (checkbox y controles)
+     ============================================================ */
 .opciones {
   display: flex;
   flex-wrap: wrap;
@@ -88,7 +135,9 @@ label[for="expTime"] {
   font-size: 15px;
 }
 
-/* ✅ Estilo longitud */
+/* ============================================================
+     Campo de longitud numérica
+     ============================================================ */
 input[type="number"] {
   width: 40px;
   height: 20px;
@@ -107,19 +156,23 @@ input[type="number"]:focus {
   outline: none;
 }
 
-/* ✅ Estilo del select */
+/* ============================================================
+     Select desplegable
+     ============================================================ */
 select {
   width: 100%;
   padding: 8px;
   border-radius: 8px;
   border: 1px solid var(--secundario-color);
-  background-color: white;
-  color: var(--primario-color);
+  background-color: var(--primario-color);
+  color: var(--color-letra);
   font-size: 15px;
   margin-top: 5px;
 }
 
-/* ✅ Estilo de los checkbox */
+/* ============================================================
+     Estilo de los checkbox personalizados
+     ============================================================ */
 .checkbox-container {
   position: relative;
   display: inline-block;
@@ -169,6 +222,7 @@ select {
   box-shadow: 0 0 10px var(--primario-color);
 }
 
+/* Animación de expansión del check */
 @keyframes checkboxExpand {
   0% {
     transform: translate(-50%, -50%) rotate(45deg) scale(0);
@@ -179,6 +233,7 @@ select {
   }
 }
 
+/* Animación de brillo */
 @keyframes glowEffect {
   0% {
     box-shadow: 0 0 5px var(--secundario-color);
@@ -189,13 +244,15 @@ select {
   }
 }
 
-/* ✅ Estilo de la tabla */
+/* ============================================================
+     Tabla de datos
+     ============================================================ */
 .tabla-datos {
   display: flex;
   flex-direction: column;
 }
 
-table{
+table {
   margin-bottom: 15px;
 }
 
@@ -203,6 +260,7 @@ table{
   text-align: center;
 }
 
+/* Campo de entrada para el Spreadsheet ID */
 #spreadsheetIdInput {
   height: 25px;
   width: 40%;
@@ -221,20 +279,24 @@ table{
   outline: none;
 }
 
+/* Contenedor de botones */
 .buttons {
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
-#content{
+/* Contenido alineado */
+#content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 15px;
 }
 
-/* ✅ Estilo del resultado */
+/* ============================================================
+     Caja de resultado
+     ============================================================ */
 #result-box {
   margin-top: 20px;
   padding: 20px;
@@ -243,18 +305,20 @@ table{
   text-align: center;
 }
 
-#result{
+#result {
   color: var(--terciario-color);
   font-size: 24px;
   font-weight: 600;
   text-shadow: 0px 0px 10px var(--color-letra);
 }
 
-#timer{
+#timer {
   margin-bottom: 20px;
 }
 
-/* ✅ Estilo de los botones */
+/* ============================================================
+     Botones generales
+     ============================================================ */
 button {
   background-color: var(--secundario-color);
   color: var(--color-letra);
@@ -263,5 +327,3 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
-
-

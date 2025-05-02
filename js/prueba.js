@@ -2,11 +2,13 @@
 const CODIGO_SECRETO = "erickvip123";
 
 // ✅ Función que verifica si el usuario ha ingresado el código Premium correctamente
+// Retorna true si el código guardado en localStorage coincide con el código secreto
 function tieneCodigoPremium() {
   return localStorage.getItem("codigoPremium") === CODIGO_SECRETO;
 }
 
 // ✅ Función que verifica si el usuario todavía está dentro del periodo de prueba de 7 días
+// Calcula la diferencia en días desde que inició la prueba y verifica si es menor a 7
 function verificarSiEstaEnPeriodoDePrueba() {
   const inicioPrueba = localStorage.getItem("inicioPrueba");
   if (!inicioPrueba) return false;
@@ -18,6 +20,10 @@ function verificarSiEstaEnPeriodoDePrueba() {
 }
 
 // ✅ Función que muestra el estado del periodo de prueba o acceso premium
+// Muestra un mensaje en el elemento con ID "mensajePeriodoPrueba" indicando:
+// - Si tiene premium → mensaje verde
+// - Si está en prueba → días restantes (color naranja)
+// - Si terminó prueba → aviso de expiración (color rojo)
 function mostrarTiempoRestante() {
   const mensaje = document.getElementById("mensajePeriodoPrueba");
   if (!mensaje) return;
@@ -61,6 +67,8 @@ function mostrarTiempoRestante() {
 }
 
 // ✅ Permitir al usuario introducir el código premium
+// Muestra un prompt para ingresar el código; si es correcto, activa Premium
+// También oculta el botón "Activar Premium con código" al activarse
 function activarPremiumConCodigo() {
   const codigo = prompt("Introduce el código premium:");
   if (codigo === CODIGO_SECRETO) {
@@ -91,6 +99,7 @@ if (tieneCodigoPremium() && botonPremium) {
 }
 
 // ✅ Función para verificar si el usuario está autenticado (puedes reusar esta del otro script)
+// Comprueba si existe un authToken en localStorage para determinar autenticación
 function estaAutenticado() {
   return localStorage.getItem("authToken") !== null;
 }

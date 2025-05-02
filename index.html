@@ -4,33 +4,43 @@
 <head>
   <!-- Definición del juego de caracteres -->
   <meta charset="UTF-8" />
+
   <!-- Configuración de la vista para dispositivos móviles -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <!-- Título de la pestaña del navegador -->
   <title>Generador Contraseñas Pro</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <!-- Hoja de estilos CSS externa -->
   <link rel="stylesheet" href="css/style.css" />
+
   <!-- Ícono de la pestaña del navegador -->
   <link rel="icon" href="image/icon-256.png" />
 </head>
 
 <body>
+  <!-- Mensaje emergente para notificaciones -->
+  <div id="mensaje" style="display:none"></div>
+
   <!-- Contenedor principal -->
   <div class="container">
-    <!-- Título principal de la aplicación -->
+    <!-- Título principal -->
     <h1>🔐 Generador de Contraseñas (Versión Pro)</h1>
+
+    <!-- Mensaje para mostrar bloqueos o advertencias -->
     <div id="mensajeBloqueo" style="color: red; margin-top: 1em;"></div>
-    <!-- Sección del generador de contraseñas (inicialmente oculta hasta autenticación) -->
+
+    <!-- Sección principal de la aplicación (oculta hasta autenticación) -->
     <div id="contenidoApp" style="display:none;">
+
+      <!-- Sección de activación premium -->
       <div class="caducidad">
         <div id="mensajePeriodoPrueba"></div>
-        <!-- Botón para activar acceso premium con un código especial -->
-        <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar
-          Premium con código</button>
+        <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
       </div>
-      <!-- Campo para seleccionar el tiempo de expiración de la contraseña -->
-      <div class="">
+
+      <!-- Sección para configurar la contraseña -->
+      <div>
         <div class="field">
           <label for="expTime">🕒 Tiempo de expiración:</label>
           <select id="expTime">
@@ -44,11 +54,14 @@
             <option value="525600">1 año</option>
           </select>
         </div>
+
         <br>
+
         <div class="opciones">
           <label for="length">Longitud:</label>
           <input type="number" id="length" min="8" max="64" value="16" />
-          <!-- Opciones para incluir distintos tipos de caracteres -->
+
+          <!-- Opciones de inclusión de caracteres -->
           <label class="checkbox-container">
             <input class="checkbox" type="checkbox" id="uppercase" />
             <span class="checkmark"></span>
@@ -76,6 +89,8 @@
           </label>
         </div>
       </div>
+
+      <!-- Tabla para mostrar contraseñas guardadas -->
       <div class="tabla-datos">
         <h2>📋 Contraseñas guardadas</h2>
         <table>
@@ -90,48 +105,53 @@
           </thead>
           <tbody id="tablaContraseñas"></tbody>
         </table>
+
         <div class="buttons">
           <input type="text" id="spreadsheetIdInput" placeholder="Pega tu ID aquí si ya tienes uno">
           <button onclick="mostrarTablaContraseñas()">🔄 Cargar contraseñas</button>
           <button id="cleanExpired">🧹 Limpiar</button>
         </div>
-
       </div>
-      <!-- Sección donde se mostrará la contraseña generada y botones de acción -->
+
+      <!-- Sección de resultado de la contraseña -->
       <div id="result-box">
         <p>Tu contraseña aparecerá aquí</p>
         <div id="result" class="password-display"></div>
+
         <br>
-        <!-- Mostrar/ocultar contraseña -->
+
         <div class="opciones">
           <label class="checkbox-container">
             <input class="checkbox" type="checkbox" id="togglePassword" onchange="togglePasswordVisibility()" />
             <span class="checkmark"></span>
-            Mostrar
-            contraseña
+            Mostrar contraseña
           </label>
         </div>
-        <!-- Temporizador para mostrar el tiempo restante antes de expiración -->
+
         <div id="timer" style="color: cyan; font-weight: bold"></div>
 
-        <!-- Botones para generar la contraseña -->
         <div class="buttons">
           <button onclick="generatePassword()">⚙️ Generar</button>
           <button onclick="copyToClipboard()">📋 Copiar</button>
-          <button id="saveButton">💾Guardar Contraseña</button>
+          <button id="saveButton">💾 Guardar Contraseña</button>
         </div>
+
         <pre id="content" style="white-space: pre-wrap;"></pre>
       </div>
+
       <br />
     </div>
+
+    <!-- Botones de autenticación -->
     <div class="buttons">
       <button id="authorize_button" onclick="handleAuthClick()">🔐 Iniciar sesión con Google</button>
-      <button id="signout_button" onclick="handleSignoutClick()"> 🔓 Cerrar sesión</button>
+      <button id="signout_button" onclick="handleSignoutClick()">🔓 Cerrar sesión</button>
     </div>
   </div>
-
-
-  <!-- Inclusión del script principal de la lógica de la app -->
+  <noscript>
+    <div style="color: red; text-align: center;">Por favor, activa JavaScript para usar esta aplicación.</div>
+  </noscript>
+  <!-- Scripts de lógica -->
   <script src="js/main.js"></script>
   <script src="js/bloqueo.js"></script>
   <script src="js/prueba.js"></script>
@@ -139,6 +159,8 @@
   <script src="js/sheets.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/service-worker.js"></script>
+
+  <!-- Google API Scripts -->
   <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
   <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </body>

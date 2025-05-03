@@ -310,6 +310,8 @@ table {
   font-size: 24px;
   font-weight: 600;
   text-shadow: 0px 0px 10px var(--color-letra);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 #timer {

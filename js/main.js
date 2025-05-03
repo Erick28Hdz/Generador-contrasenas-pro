@@ -30,11 +30,11 @@ function generatePassword() {
   const useSymbols = document.getElementById('symbols').checked;
   const noAmbiguous = document.getElementById('no-ambiguous').checked;
 
-  // Valida que la longitud mínima sea de 8 para seguridad.
-  if (isNaN(length) || length <= 7) {
-    mostrarMensaje("Por seguridad, usa al menos 8 caracteres.");
-    return;
-  }
+  // Valida que la longitud esté entre 8 y 64 para seguridad.
+if (isNaN(length) || length < 8 || length > 64) {
+  mostrarMensaje("Por seguridad, usa entre 8 y 64 caracteres.");
+  return;
+}
 
   // Valida que el tiempo de expiración sea un número positivo.
   const expirationMinutes = parseInt(document.getElementById('expTime').value);

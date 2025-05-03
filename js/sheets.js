@@ -144,11 +144,17 @@ async function appendDataToSpreadsheet(spreadsheetId, values) {
 }
 
 // Copiar al portapapeles
-function copyToClipboard(text) {
+function copyToClipboard() {
+    const text = document.getElementById('result').innerText;
+    if (!text) {
+        mostrarMensaje('⚠️ No hay ninguna contraseña generada para copiar.');
+        return;
+    }
     navigator.clipboard.writeText(text).then(() => {
-        mostrarMensaje('✅ ID copiado');
+        mostrarMensaje('✅ Contraseña copiada al portapapeles');
     }).catch(err => {
         console.error('❌ Error al copiar:', err);
+        mostrarMensaje('❌ Error al copiar al portapapeles');
     });
 }
 

@@ -133,15 +133,18 @@ function limpiarCuentaRegresiva() {
   clearInterval(cuentaRegresivaInterval);
 }
 
-// Permite copiar al portapapeles la contraseña visible.
-function copyToClipboard() {
+// Copiar contraseña al portapapeles
+function copyPassword() {
   const password = document.getElementById('result').innerText;
   if (password && password !== "⚠️ Contraseña expirada.") {
-    navigator.clipboard.writeText(password).then(() => {
-      mostrarMensaje("¡Contraseña copiada al portapapeles!");
-    });
+      navigator.clipboard.writeText(password).then(() => {
+          mostrarMensaje('✅ Contraseña copiada al portapapeles');
+      }).catch(err => {
+          console.error('❌ Error al copiar la contraseña:', err);
+          mostrarMensaje('❌ Error al copiar la contraseña');
+      });
   } else {
-    mostrarMensaje("No hay contraseña válida para copiar.");
+      mostrarMensaje('⚠️ No hay contraseña válida para copiar.');
   }
 }
 

@@ -68,6 +68,9 @@ function maybeEnableButtons() {
 
 // Maneja el clic en el botón de autorización
 function handleAuthClick() {
+    // 🔥 Limpia localStorage antes de iniciar sesión
+    localStorage.clear();
+
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
             throw (resp); // Lanza error si hay un problema
@@ -90,42 +93,50 @@ function handleAuthClick() {
     }
 }
 
-// Maneja el clic en el botón de cerrar sesión
+// ✅ Maneja el clic en el botón de cerrar sesión
 function handleSignoutClick() {
+    // Obtiene el token actual de sesión
     const token = gapi.client.getToken();
+
+    // Si existe un token, lo revoca (cierra sesión en Google)
     if (token !== null) {
-        google.accounts.oauth2.revoke(token.access_token); // Revoca el token en Google
-        gapi.client.setToken('');                         // Limpia el token en gapi
-        localStorage.removeItem('authToken');            // Elimina el token guardado
-        localStorage.removeItem('spreadsheetId');       // Elimina el ID del spreadsheet guardado
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');  // Limpia el token localmente
     }
 
-    document.getElementById('content').innerText = '';                   // Limpia contenido mostrado
-    document.getElementById('authorize_button').style.visibility = 'visible'; // Muestra botón autorizar
-    document.getElementById('signout_button').style.visibility = 'hidden';    // Oculta botón cerrar sesión
-
-    // Limpia mensajes relacionados al periodo de prueba o bloqueo
-    document.getElementById('mensajePeriodoPrueba').innerText = '';
-    document.getElementById('mensajeBloqueo').innerText = '';
-
-    // Verifica autenticación para actualizar la interfaz
+    // Limpia el contenido mostrado en la interfaz
+    document.getElementById('content').innerText = '';
+    document.getElementById('authorize_button').style.visibility = 'visible'; // Muestra botón de iniciar sesión
+    document.getElementById('signout_button').style.visibility = 'hidden';   // Oculta botón de cerrar sesión
+    document.getElementById('mensajePeriodoPrueba').innerText = '';           // Limpia mensaje de periodo de prueba
+    document.getElementById('mensajeBloqueo').innerText = '';                 // Limpia mensaje de bloqueo
+    
+    // Vuelve a verificar el estado de autenticación para ajustar la interfaz
     verificarAutenticacion();
 }
 
-// Ejecuta al cargar la ventana
-window.onload = () => {
-    verificarAutenticacion();   // Verifica si el usuario está autenticado
-    mostrarTiempoRestante();    // Muestra tiempo restante de sesión o periodo de prueba
-};
+// ✅ Verifica si el usuario está autenticado actualmente
+function usuarioAutenticado() {
+    // Obtiene el token actual de Google
+    const token = gapi.client.getToken();
 
-// Verifica si el usuario tiene un token válido almacenado
+    // Devuelve true si el token existe (usuario autenticado), o false si no
+    return token !== null;
+}
+
+// ✅ Verifica si hay un token válido almacenado y ajusta la interfaz
 function verificarAutenticacion() {
-    const token = localStorage.getItem('authToken'); // Recupera el token
+    // Obtiene el token actual de Google
+    const token = gapi.client.getToken();
 
     if (token) {
-        desbloquearContenido();      // Desbloquea contenido si está autenticado
-        mostrarTiempoRestante();     // Actualiza el estado del periodo de prueba
+        // Si hay token, desbloquea el contenido restringido
+        desbloquearContenido();
+
+        // Muestra el tiempo restante de la sesión o del periodo de prueba
+        mostrarTiempoRestante();
     } else {
-        bloquearContenido();         // Bloquea contenido si no hay autenticación
+        // Si no hay token, bloquea el contenido restringido
+        bloquearContenido();
     }
 }

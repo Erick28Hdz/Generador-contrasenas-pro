@@ -4,7 +4,7 @@ gestionarlas con expiración, mostrarlas en una tabla (integración con Google S
 y permitir su copia al portapapeles. Incluye cifrado y descifrado con clave.
 */
 
-let cuentaRegresivaInterval; 
+let cuentaRegresivaInterval;
 // Variable global para manejar el intervalo de cuenta regresiva, 
 // así podemos detenerlo cuando expire o se limpie.
 
@@ -220,10 +220,18 @@ async function mostrarTablaContraseñas() {
             <td>${expira}</td>
             <td>${palabraClave}</td>
             <td>
-                <button onclick="descifrarDesdeTabla('${contrasena}')">🔓 Ver</button>
+                <button onclick="mostrarContrasenaGuardada('${contrasena}')">🔓 Ver</button>
             </td>
         `;
       tabla.appendChild(tr);
+    });
+
+    document.getElementById('tablaContraseñas').addEventListener('click', function (e) {
+      if (e.target.classList.contains('ver-btn')) {
+        const contrasenaCodificada = e.target.getAttribute('data-contrasena');
+        const contrasena = decodeURIComponent(contrasenaCodificada);
+        descifrarDesdeTabla(contrasena);
+      }
     });
     window.tablaCargada = true; // Marca que la tabla fue cargada correctamente.
   } catch (e) {

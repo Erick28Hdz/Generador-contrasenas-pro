@@ -249,6 +249,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const length = document.getElementById('length').value;
         let password = document.getElementById('result').innerText;
+
+        if (!password) {
+            mostrarMensaje('⚠️ No has generado ninguna contraseña. Usa el generador primero.');
+            return;
+        }
         const keyword = prompt('📝 Escribe la palabra clave para recordar dónde usarás esta contraseña:');
 
         if (keyword === null || keyword.trim() === "") {
@@ -271,20 +276,18 @@ document.addEventListener('DOMContentLoaded', function () {
             `${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:` +
             `${now.getMinutes().toString().padStart(2, '0')}`;
 
-        // ✅ 🔐 CIFRADO SI EL USUARIO LO ACTIVÓ
-        if (cifradoActivado) {
-            const clave = prompt("🔐 Introduce una clave para cifrar esta contraseña:");
-            if (!clave) {
-                mostrarMensaje("❌ No se puede cifrar sin clave.");
-                return;
-            }
-            try {
-                password = await cifrado.cifrarTexto(password, clave); // ← ahora sí funcionará
-            } catch (e) {
-                mostrarMensaje("❌ Error al cifrar la contraseña.");
-                console.error(e);
-                return;
-            }
+        // 🔐 CIFRADO SIEMPRE ACTIVADO
+        const clave = prompt("🔐 Introduce una clave para cifrar esta contraseña:");
+        if (!clave) {
+            mostrarMensaje("❌ No se puede cifrar sin clave.");
+            return;
+        }
+        try {
+            password = await cifrado.cifrarTexto(password, clave);
+        } catch (e) {
+            mostrarMensaje("❌ Error al cifrar la contraseña.");
+            console.error(e);
+            return;
         }
 
         const lastSequenceNumber = await getLastSequenceNumber(spreadsheetId);
@@ -299,6 +302,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ];
 
         await appendDataToSpreadsheet(spreadsheetId, values);
+        mostrarMensaje('✅ Contraseña guardada');
     });
     document.getElementById('cleanExpired').addEventListener('click', async () => {
         if (!window.tablaCargada) {

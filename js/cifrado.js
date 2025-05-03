@@ -1,9 +1,3 @@
-// ✅ Activar o desactivar el cifrado con el checkbox
-function toggleCifrado() {
-    const checkbox = document.getElementById("togglePassword");
-    window.cifradoActivado = checkbox.checked; 
-}
-
 // ✅ Objeto que contiene todas las funciones de cifrado y descifrado
 const cifrado = {
     /**
@@ -96,28 +90,20 @@ const cifrado = {
  * @param {string} textoCifrado - El texto cifrado (o texto plano si no se usó cifrado).
  */
 async function mostrarContrasenaGuardada(textoCifrado) {
-    if (cifradoActivado) {
-        const clave = prompt("🔓 Introduce la clave para descifrar:");
-        if (!clave) {
-            mostrarMensaje("❌ Clave requerida.");
-            return;
-        }
-        try {
-            const descifrada = await cifrado.descifrarTexto(textoCifrado, clave);
-            mostrarMensaje(`🔓 Contraseña: ${descifrada}`);
-        } catch (err) {
-            mostrarMensaje("❌ Clave incorrecta o formato inválido.");
-        }
-    } else {
-        mostrarMensaje(`🔐 Contraseña almacenada: ${textoCifrado}`);
+    const clave = prompt("🔓 Introduce la clave para descifrar:");
+    if (!clave) {
+        mostrarMensaje("❌ Clave requerida.");
+        return;
+    }
+    try {
+        const descifrada = await cifrado.descifrarTexto(textoCifrado, clave);
+        
+        // Copiar automáticamente al portapapeles
+        await navigator.clipboard.writeText(descifrada);
+        
+        mostrarMensaje(`🔓 Contraseña: ${descifrada}\n ✅ Copiada al portapapeles`);
+    } catch (err) {
+        mostrarMensaje("❌ Clave incorrecta o formato inválido.");
     }
 }
 
-// ✅ Configura el checkbox y define el estado inicial del cifrado al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-    const checkbox = document.getElementById("togglePassword");
-    window.cifradoActivado = checkbox.checked;
-
-    // ✅ Asegura que el checkbox cambie el estado del cifrado global
-    checkbox.addEventListener("change", toggleCifrado);
-});

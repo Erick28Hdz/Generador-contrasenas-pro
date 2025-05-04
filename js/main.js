@@ -220,17 +220,33 @@ async function mostrarTablaContraseñas() {
 
     datos.forEach((fila, index) => {
       const [n, longitud, expira, contrasena, palabraClave] = fila;
-
+    
       const tr = document.createElement('tr');
-      tr.innerHTML = `
-            <td>${n}</td>
-            <td>${longitud}</td>
-            <td>${expira}</td>
-            <td>${palabraClave}</td>
-            <td>
-                <button onclick="mostrarContrasenaGuardada('${contrasena}')">🔓 Ver</button>
-            </td>
-        `;
+    
+      const tdN = document.createElement('td');
+      tdN.textContent = n;
+    
+      const tdLongitud = document.createElement('td');
+      tdLongitud.textContent = longitud;
+    
+      const tdExpira = document.createElement('td');
+      tdExpira.textContent = expira;
+    
+      const tdPalabraClave = document.createElement('td');
+      tdPalabraClave.textContent = palabraClave;
+    
+      const tdBoton = document.createElement('td');
+      const boton = document.createElement('button');
+      boton.textContent = '🔓 Ver';
+      boton.onclick = () => mostrarContrasenaGuardada(contrasena);
+      tdBoton.appendChild(boton);
+    
+      tr.appendChild(tdN);
+      tr.appendChild(tdLongitud);
+      tr.appendChild(tdExpira);
+      tr.appendChild(tdPalabraClave);
+      tr.appendChild(tdBoton);
+    
       tabla.appendChild(tr);
     });
 

@@ -84,7 +84,9 @@ async function createSpreadsheetAndHeaders() {
                             range: {
                                 sheetId: 0,             // ID de la hoja (generalmente 0 para la hoja principal)
                                 startRowIndex: 0,       // Empieza en fila 0 (encabezados)
-                                endRowIndex: 1          // Termina en fila 1 (sin incluir fila 1, solo la 0)
+                                endRowIndex: 1,          // Termina en fila 1 (sin incluir fila 1, solo la 0)
+                                startColumnIndex: 0,  // columna A
+                                endColumnIndex: 5    // columna F (sin incluir), cubre A-E
                             },
                             cell: {
                                 userEnteredFormat: {    // Estilo aplicado al contenido de las celdas
@@ -239,6 +241,24 @@ async function appendDataToSpreadsheet(spreadsheetId, values) {
     }
 }
 
+async function cargarTabla() {
+    try {
+        const response = await gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: spreadsheetId,
+            range: "A2:E",
+        });
+        const rows = response.result.values || [];
+        actualizarTablaEnPantalla(rows);
+
+        // ✅ Marca que la tabla está cargada correctamente
+        window.tablaCargada = true;
+    } catch (err) {
+        console.error('❌ Error al cargar la tabla:', err);
+        window.tablaCargada = false; // Opcional: marca como no cargada en caso de error
+    }
+}
+
+
 // Elimina filas con contraseñas expiradas del spreadsheet
 async function deleteExpiredPasswords(spreadsheetId) {
     if (!window.tablaCargada) {
@@ -331,6 +351,9 @@ async function deleteExpiredPasswords(spreadsheetId) {
             resource: { requests },
         });
         // Envía las solicitudes de eliminación al API de Google Sheets
+
+        // ✅ Después de eliminar, recarga la tabla completa
+        await mostrarTablaContraseñas();  // ← Asegúrate de tener esta función implementada
 
         console.log('✅ Contraseñas expiradas eliminadas.');
         mostrarMensaje(`🗑️ Se eliminaron ${expiredRowIndices.length} contraseñas expiradas.`);
@@ -431,7 +454,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-
         // Obtiene el último número de secuencia registrado en la hoja
         const lastSequenceNumber = await getLastSequenceNumber(spreadsheetId);
         // Calcula el nuevo número de secuencia
@@ -452,6 +474,10 @@ document.addEventListener('DOMContentLoaded', function () {
         mostrarMensaje('✅ Contraseña guardada');
         // ✅ Marca que la contraseña actual ya fue guardada
         passwordAlreadySaved = true;
+        // ✅ Si la tabla está cargada en pantalla, actualízala automáticamente
+        if (window.tablaCargada) {
+            await mostrarTablaContraseñas();
+        }
     });
 
     // Asigna evento al botón de limpiar contraseñas expiradas

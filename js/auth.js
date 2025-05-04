@@ -66,11 +66,50 @@ function maybeEnableButtons() {
     }
 }
 
-// Maneja el clic en el botón de autorización
-function handleAuthClick() {
-    // 🔥 Limpia localStorage antes de iniciar sesión
-    localStorage.clear();
+function limpiarCamposInterfaz() {
+    // Limpia inputs
+    document.getElementById('spreadsheetIdInput').value = '';
+    document.getElementById('length').value = '16';
+    document.getElementById('result').innerText = '';
 
+    // Limpia mensajes
+    document.getElementById('mensajePeriodoPrueba').innerText = '';
+    document.getElementById('mensajeBloqueo').innerText = '';
+
+    // Limpia tabla (si tienes una con id="tablaContraseñas" o similar)
+    const tabla = document.getElementById('tablaContraseñas');
+    if (tabla) {
+        tabla.innerHTML = '';
+    }
+
+    // Resetea select expTime a su opción por defecto (primer opción)
+    const expTimeSelect = document.getElementById('expTime');
+    if (expTimeSelect) {
+        expTimeSelect.selectedIndex = 0;
+    }
+
+    // Desmarca todos los checkboxes
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Limpia el timer (tiempo de expiración)
+    const timerElement = document.getElementById('timer');
+    if (timerElement) {
+        timerElement.innerText = '';
+    }
+    limpiarCuentaRegresiva(); 
+
+    // Limpia bandera de tabla cargada
+    window.tablaCargada = false;
+
+    // Limpia otros campos o estados si necesitas
+    passwordAlreadySaved = false;
+}
+
+// Maneja el clic en el botón de inicio de sesión
+function handleAuthClick() {
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
             throw (resp); // Lanza error si hay un problema
@@ -91,6 +130,8 @@ function handleAuthClick() {
     } else {
         tokenClient.requestAccessToken({ prompt: '' }); // Solicitar token sin volver a pedir consentimiento
     }
+
+    limpiarCamposInterfaz();
 }
 
 // ✅ Maneja el clic en el botón de cerrar sesión
@@ -113,6 +154,7 @@ function handleSignoutClick() {
     
     // Vuelve a verificar el estado de autenticación para ajustar la interfaz
     verificarAutenticacion();
+    limpiarCamposInterfaz();
 }
 
 // ✅ Verifica si el usuario está autenticado actualmente

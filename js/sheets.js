@@ -342,6 +342,8 @@ async function deleteExpiredPasswords(spreadsheetId) {
     }
 }
 
+let passwordAlreadySaved = false; // ← bandera global para controlar el guardado
+
 // Evento principal: ejecuta cuando el DOM está cargado
 document.addEventListener('DOMContentLoaded', function () {
     // Obtiene el token de autenticación guardado en localStorage
@@ -354,11 +356,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Asigna evento al botón de guardar contraseña
     document.getElementById('saveButton').addEventListener('click', async () => {
-        // Obtiene el ID del spreadsheet guardado en localStorage
-        const spreadsheetId = localStorage.getItem('spreadsheetId');
+        // 🚀 PRIMERO: toma el ID del input (si existe), o localStorage
+        let spreadsheetIdInput = document.getElementById('spreadsheetIdInput').value.trim();
+        let spreadsheetId = spreadsheetIdInput || localStorage.getItem('spreadsheetId');
         // Si no hay spreadsheet, avisa al usuario y termina
         if (!spreadsheetId) {
-            mostrarMensaje('⚠️ Primero debes crear el archivo antes de guardar contraseñas.');
+            mostrarMensaje('⚠️ Primero debes crear o cargar el archivo antes de guardar contraseñas.');
             return;
         }
 
@@ -370,6 +373,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Si no hay contraseña generada, avisa al usuario y termina
         if (!password) {
             mostrarMensaje('⚠️ No has generado ninguna contraseña. Usa el generador primero.');
+            return;
+        }
+
+        // ⛔ Si ya se guardó esta contraseña, bloquea el guardado
+        if (passwordAlreadySaved) {
+            mostrarMensaje('⚠️ Ya guardaste esta contraseña. Por favor, genera una nueva antes de guardar otra vez.');
             return;
         }
 
@@ -422,6 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+
         // Obtiene el último número de secuencia registrado en la hoja
         const lastSequenceNumber = await getLastSequenceNumber(spreadsheetId);
         // Calcula el nuevo número de secuencia
@@ -440,6 +450,8 @@ document.addEventListener('DOMContentLoaded', function () {
         await appendDataToSpreadsheet(spreadsheetId, values);
         // Muestra mensaje de éxito al usuario
         mostrarMensaje('✅ Contraseña guardada');
+        // ✅ Marca que la contraseña actual ya fue guardada
+        passwordAlreadySaved = true;
     });
 
     // Asigna evento al botón de limpiar contraseñas expiradas

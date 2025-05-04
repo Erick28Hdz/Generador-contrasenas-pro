@@ -22,6 +22,8 @@ function mostrarMensaje(mensaje) {
 
 // Función principal para generar contraseñas.
 function generatePassword() {
+  
+
   // Obtiene las configuraciones seleccionadas por el usuario.
   const length = parseInt(document.getElementById('length').value);
   const useUpper = document.getElementById('uppercase').checked;
@@ -31,10 +33,10 @@ function generatePassword() {
   const noAmbiguous = document.getElementById('no-ambiguous').checked;
 
   // Valida que la longitud esté entre 8 y 64 para seguridad.
-if (isNaN(length) || length < 8 || length > 64) {
-  mostrarMensaje("Por seguridad, usa entre 8 y 64 caracteres.");
-  return;
-}
+  if (isNaN(length) || length < 8 || length > 64) {
+    mostrarMensaje("Por seguridad, usa entre 8 y 64 caracteres.");
+    return;
+  }
 
   // Valida que el tiempo de expiración sea un número positivo.
   const expirationMinutes = parseInt(document.getElementById('expTime').value);
@@ -77,6 +79,9 @@ if (isNaN(length) || length < 8 || length > 64) {
   const resultEl = document.getElementById('result');
   resultEl.innerText = password;
   resultEl.classList.remove("expired"); // Limpia estado anterior (expirada).
+
+  // 🔄 Reinicia la bandera al generar una nueva contraseña
+  passwordAlreadySaved = false;
 
   // Permite al usuario decidir si mostrarla desenfocada o visible.
   const showPassword = document.getElementById('togglePassword').checked;
@@ -137,14 +142,14 @@ function limpiarCuentaRegresiva() {
 function copyPassword() {
   const password = document.getElementById('result').innerText;
   if (password && password !== "⚠️ Contraseña expirada.") {
-      navigator.clipboard.writeText(password).then(() => {
-          mostrarMensaje('✅ Contraseña copiada al portapapeles');
-      }).catch(err => {
-          console.error('❌ Error al copiar la contraseña:', err);
-          mostrarMensaje('❌ Error al copiar la contraseña');
-      });
+    navigator.clipboard.writeText(password).then(() => {
+      mostrarMensaje('✅ Contraseña copiada al portapapeles');
+    }).catch(err => {
+      console.error('❌ Error al copiar la contraseña:', err);
+      mostrarMensaje('❌ Error al copiar la contraseña');
+    });
   } else {
-      mostrarMensaje('⚠️ No hay contraseña válida para copiar.');
+    mostrarMensaje('⚠️ No hay contraseña válida para copiar.');
   }
 }
 

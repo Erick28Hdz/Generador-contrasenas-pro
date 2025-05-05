@@ -1,58 +1,40 @@
-/* ============================================================
-   Variables globales (colores principales del sitio)
-   ============================================================ */
+/* ===== Variables de colores ===== */
 :root {
   --primario-color: #131010;
-  /* Color principal (fondo oscuro) */
   --secundario-color: #123458;
-  /* Color secundario (botones, detalles) */
   --terciario-color: #030303;
-  /* Color terciario (contenedor principal) */
   --cuaternario-color: #D4C9BE;
-  /* Color claro para bordes, sombras */
   --color-letra: #F1EFEC;
-  /* Color principal de la letra */
 }
 
-/* ============================================================
-     Estilos generales del body
-     ============================================================ */
+/* ===== Body ===== */
 body {
   background: var(--primario-color);
-  /* Fondo general */
   display: flex;
-  /* Uso de flexbox para centrar */
   justify-content: center;
-  /* Centra horizontalmente */
-  padding: 40px;
-  /* Espaciado interior */
+  padding: 20px;
 }
 
-/* ============================================================
-     Contenedor principal
-     ============================================================ */
+/* ===== Contenedor principal ===== */
 .container {
   font-family: Arial, sans-serif;
-  /* Fuente general */
   background: var(--terciario-color);
-  /* Fondo del contenedor */
-  padding: 20px 30px;
-  /* Espaciado interior */
+  padding: 20px 10px;
   border-radius: 12px;
-  /* Bordes redondeados */
   box-shadow: 0 4px 8px var(--cuaternario-color);
-  /* Sombra */
   max-width: 500px;
-  /* Ancho máximo */
   width: 100%;
-  /* Ocupa todo el ancho disponible */
   color: var(--color-letra);
-  /* Color del texto */
+  font-size: clamp(14px, 2vw, 18px);
 }
 
-/* Espaciado inferior para el mensaje de bloqueo */
+/* ===== Mensaje bloqueo ===== */
 #mensajeBloqueo {
   margin-bottom: 20px;
+}
+
+#mensajePeriodoPrueba {
+  font-size: 15px;
 }
 
 #mensaje {
@@ -67,20 +49,15 @@ body {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-/* ============================================================
-     Títulos h1 y h2
-     ============================================================ */
+/* ===== Títulos ===== */
 h1,
 h2 {
   text-align: center;
-  /* Centrado del texto */
   margin-bottom: 20px;
-  /* Espacio inferior */
+  font-size: clamp(18px, 2.5vw, 28px);
 }
 
-/* ============================================================
-     Sección de caducidad
-     ============================================================ */
+/* ===== Caducidad ===== */
 .caducidad {
   display: flex;
   justify-content: space-around;
@@ -88,9 +65,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-/* ============================================================
-     Campo de expiración
-     ============================================================ */
+/* ===== Campo expiración ===== */
 .field {
   display: flex;
   justify-content: space-between;
@@ -120,14 +95,13 @@ label[for="expTime"] {
   outline: none;
 }
 
-/* ============================================================
-     Opciones (checkbox y controles)
-     ============================================================ */
+/* ===== Opciones ===== */
 .opciones {
+  margin: 10px 20px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
   gap: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
 }
 
@@ -135,9 +109,7 @@ label[for="expTime"] {
   font-size: 15px;
 }
 
-/* ============================================================
-     Campo de longitud numérica
-     ============================================================ */
+/* ===== Input numérico ===== */
 input[type="number"] {
   width: 40px;
   height: 20px;
@@ -156,9 +128,7 @@ input[type="number"]:focus {
   outline: none;
 }
 
-/* ============================================================
-     Select desplegable
-     ============================================================ */
+/* ===== Select ===== */
 select {
   width: 100%;
   padding: 8px;
@@ -170,9 +140,7 @@ select {
   margin-top: 5px;
 }
 
-/* ============================================================
-     Estilo de los checkbox personalizados
-     ============================================================ */
+/* ===== Checkbox personalizado ===== */
 .checkbox-container {
   position: relative;
   display: inline-block;
@@ -214,15 +182,11 @@ select {
   border-color: var(--primario-color);
 }
 
-.checkbox-container input:checked~.checkmark:after {
-  border-color: #000;
-}
-
 .checkbox-container:hover .checkmark {
   box-shadow: 0 0 10px var(--primario-color);
 }
 
-/* Animación de expansión del check */
+/* ===== Animaciones checkbox ===== */
 @keyframes checkboxExpand {
   0% {
     transform: translate(-50%, -50%) rotate(45deg) scale(0);
@@ -233,7 +197,6 @@ select {
   }
 }
 
-/* Animación de brillo */
 @keyframes glowEffect {
   0% {
     box-shadow: 0 0 5px var(--secundario-color);
@@ -244,9 +207,7 @@ select {
   }
 }
 
-/* ============================================================
-     Tabla de datos
-     ============================================================ */
+/* ===== Tabla de datos ===== */
 .tabla-datos {
   display: flex;
   flex-direction: column;
@@ -260,10 +221,10 @@ table {
   text-align: center;
 }
 
-/* Campo de entrada para el Spreadsheet ID */
+/* ===== Input Spreadsheet ID ===== */
 #spreadsheetIdInput {
   height: 25px;
-  width: 40%;
+  width: 50%;
   padding-left: 5px;
   border: 1px solid var(--cuaternario-color);
   border-radius: 8px;
@@ -279,14 +240,16 @@ table {
   outline: none;
 }
 
-/* Contenedor de botones */
+/* ===== Botones ===== */
 .buttons {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 10px;
 }
 
-/* Contenido alineado */
+/* ===== Contenido ===== */
 #content {
   display: flex;
   justify-content: space-between;
@@ -294,9 +257,7 @@ table {
   font-size: 15px;
 }
 
-/* ============================================================
-     Caja de resultado
-     ============================================================ */
+/* ===== Caja de resultado ===== */
 #result-box {
   margin-top: 20px;
   padding: 20px;
@@ -318,9 +279,7 @@ table {
   margin-bottom: 20px;
 }
 
-/* ============================================================
-     Botones generales
-     ============================================================ */
+/* ===== Botón general ===== */
 button {
   background-color: var(--secundario-color);
   color: var(--color-letra);
@@ -329,3 +288,25 @@ button {
   border-radius: 8px;
   cursor: pointer;
 }
+
+
+/* Móvil pequeño (teléfonos) */
+@media (max-width: 480px) {
+  #spreadsheetIdInput {
+    width: 80%;
+  }
+
+  #expTime {
+    width: 80%;
+  }
+}
+
+/* Tablet y teléfonos grandes */
+@media (min-width: 481px) and (max-width: 768px) {
+  #spreadsheetIdInput {
+    width: 60%;
+  }
+}
+
+/* Escritorio y pantallas grandes */
+@media (min-width: 769px) {}

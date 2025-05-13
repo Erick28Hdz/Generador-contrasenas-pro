@@ -1,8 +1,11 @@
-// ID de cliente de Google (OAuth 2.0)
-const CLIENT_ID = '481398224733-ui5jk0ke8bd303aaq1muml9ndn77ouka.apps.googleusercontent.com';
+// Carga las variables de entorno desde el archivo .env
+require('dotenv').config();
+
+// ID de cliente de Google (OAuth 2.0) 
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 // Clave de API para acceder a los servicios de Google
-const API_KEY = 'AIzaSyBCYaZfbQqP4QkS1HnwGEMwc-5J6pNG0kI';
+const API_KEY = process.env.GOOGLE_API_KEY;
 
 // Documento de descubrimiento para Google Sheets API v4
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';

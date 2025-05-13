@@ -51,5 +51,5 @@ app.use('/api', estadoUsuarioRoutes);        // ej: GET /api/estadoUsuario/:corr
 
 // ✅ Inicia el servidor en el puerto especificado
 app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
+    console.log(`Servidor escuchando en https://generador-contrasenas-pro-nzqx-198hbdzwq.vercel.app:${PORT}`);
 });

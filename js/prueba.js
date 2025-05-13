@@ -65,7 +65,7 @@ async function activarPremiumConCodigo() {
 
   try {
     // ✅ Solo verificamos el código
-    const verificarResp = await fetch("http://localhost:3000/api/verificarCodigo", {
+    const verificarResp = await fetch("https://generador-contrasenas-pro-nzqx-198hbdzwq.vercel.app/api/verificarCodigo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ codigo }), // 🔁 Solo el código

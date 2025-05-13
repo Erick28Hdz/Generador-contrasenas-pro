@@ -178,11 +178,11 @@ function handleAuthClick() {
 
         try {
             // 1. Verifica si ya existe un usuario
-            const checkUser = await fetch(`http://localhost:3000/api/membresia/${encodeURIComponent(email)}`);
+            const checkUser = await fetch(`https://generador-contrasenas-pro-nzqx-198hbdzwq.vercel.app/api/membresia/${encodeURIComponent(email)}`);
 
             if (checkUser.status === 404) {
                 // 2. Si no existe (status 404), lo crea
-                const createUser = await fetch('http://localhost:3000/api/membresia/', {
+                const createUser = await fetch('https://generador-contrasenas-pro-nzqx-198hbdzwq.vercel.app/api/membresia/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -226,7 +226,7 @@ async function obtenerEstadoUsuarioDesdeServidor() {
     const { email, name } = userInfo;
 
     try {
-        const response = await fetch('http://localhost:3000/api/estadoUsuario', {
+        const response = await fetch('https://generador-contrasenas-pro-nzqx-198hbdzwq.vercel.app/api/estadoUsuario', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

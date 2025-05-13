@@ -20,22 +20,22 @@
   <link rel="apple-touch-icon" href="image/icon-256.png" sizes="256x256" type="image/png" />
 </head>
 
+
+
 <body>
   <!-- Mensaje emergente para notificaciones -->
   <div id="mensaje" style="display:none"></div>
   <!-- Contenedor principal -->
   <div class="container">
     <!-- Título principal -->
-    <h1>🔐 Generador de Contraseñas (Versión Pro)</h1>
+    <h1>🔐 Generador de Contraseñas (Versión Profesional)</h1>
     <!-- Mensaje para mostrar bloqueos o advertencias -->
     <div id="mensajeBloqueo" style="color: red; margin-top: 1em;"></div>
     <!-- Sección principal de la aplicación (oculta hasta autenticación) -->
     <div id="contenidoApp" style="display:none;">
       <!-- Sección de activación premium -->
-      <div class="caducidad">
-        <div id="mensajePeriodoPrueba"></div>
-        <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
-      </div>
+      <div id="saludoUsuario"></div>
+      
       <!-- Sección para configurar la contraseña -->
       <div>
         <div class="field">
@@ -126,6 +126,10 @@
         <pre id="content" style="white-space: pre-wrap;"></pre>
       </div>
       <br />
+      <div class="caducidad">
+        <div id="mensajePeriodoPrueba"></div>
+        <button id="botonPremium" onclick="activarPremiumConCodigo()">🔑 Activar Premium con código</button>
+      </div>
     </div>
     <!-- Botones de autenticación -->
     <div class="buttons">
@@ -138,12 +142,13 @@
     <div style="color: red; text-align: center;">Por favor, activa JavaScript para usar esta aplicación.</div>
   </noscript>
   <!-- Scripts de lógica -->
-  <script src="js/main.js"></script>
-  <script src="js/bloqueo.js"></script>
+  
+  <script src="js/auth.js"></script>
   <script src="js/prueba.js"></script>
+  <script src="js/bloqueo.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/cifrado.js"></script>
   <script src="js/sheets.js"></script>
-  <script src="js/auth.js"></script>
   <script src="js/service-worker.js"></script>
 
   <!-- Google API Scripts -->
@@ -160,7 +165,6 @@
       });
     }
   </script>
-
 </body>
 
 </html>

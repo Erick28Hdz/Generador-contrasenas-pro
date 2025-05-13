@@ -1,105 +1,103 @@
-// ✅ Constante que representa el código secreto para activar el modo Premium manualmente
-const CODIGO_SECRETO = "erickvip123";
-
-// ✅ Función que verifica si el usuario ha ingresado el código Premium correctamente
-// Retorna true si el código guardado en localStorage coincide con el código secreto
-function tieneCodigoPremium() {
-  return localStorage.getItem("codigoPremium") === CODIGO_SECRETO;
+// ✅ Verifica si el usuario está autenticado por token
+function estaAutenticado() {
+  return localStorage.getItem("authToken") !== null;
 }
 
-// ✅ Función que verifica si el usuario todavía está dentro del periodo de prueba de 7 días
-// Calcula la diferencia en días desde que inició la prueba y verifica si es menor a 7
-function verificarSiEstaEnPeriodoDePrueba() {
-  const inicioPrueba = localStorage.getItem("inicioPrueba");
-  if (!inicioPrueba) return false;
-
-  const inicio = new Date(inicioPrueba);
-  const hoy = new Date();
-  const diferenciaDias = Math.floor((hoy - inicio) / (1000 * 60 * 60 * 24));
-  return diferenciaDias < 7;
-}
-
-// ✅ Función que muestra el estado del periodo de prueba o acceso premium
-// Muestra un mensaje en el elemento con ID "mensajePeriodoPrueba" indicando:
-// - Si tiene premium → mensaje verde
-// - Si está en prueba → días restantes (color naranja)
-// - Si terminó prueba → aviso de expiración (color rojo)
+// Función que muestra el estado del periodo de prueba o acceso premium
 function mostrarTiempoRestante() {
   const mensaje = document.getElementById("mensajePeriodoPrueba");
-  if (!mensaje) return;
+  const plan = localStorage.getItem("planPremium");
+  const finPremium = localStorage.getItem("finPremium");
+  const diasRestantes = localStorage.getItem("diasRestantes");
+  const nombreUsuario = localStorage.getItem("nombreUsuario");
 
+  if (!mensaje) return;
   if (!estaAutenticado()) {
     mensaje.innerText = "";
     return;
   }
 
-  // Si tiene acceso Premium
-  if (tieneCodigoPremium()) {
-    mensaje.innerText = "🔓 Acceso Premium Activado.";
-    mensaje.style.color = "green";
+  const botonPremium = document.getElementById("botonPremium");
+  if (plan === "premium" && botonPremium) {
+    botonPremium.style.display = "none";
+  }
+
+  let saludo = nombreUsuario ? `👋 Hola ${nombreUsuario}. ` : "";
+
+  if (plan && finPremium) {
+    const fin = new Date(finPremium);
+    const hoy = new Date();
+
+    const tiempoRestante = fin.getTime() - hoy.getTime();
+    const diasRestantes = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+
+    const nombrePlan = localStorage.getItem("nombrePlan") || plan;
+
+    if (fin > hoy) {
+      if (plan === 'prueba') {
+        const saludoDiv = document.getElementById("saludoUsuario");
+        saludoDiv.innerText = saludo;
+        mensaje.innerText = `🧪 Te quedan ${diasRestantes} días de prueba (hasta el ${fin.toLocaleDateString()}).`;
+        mensaje.style.color = 'orange';
+      } else {
+        const saludoDiv = document.getElementById("saludoUsuario");
+        saludoDiv.innerText = saludo;
+        mensaje.innerText = `🔓 ${nombrePlan} activo hasta el ${fin.toLocaleDateString()}.`;
+        mensaje.style.color = 'green';
+      }
+    } else {
+      const saludoDiv = document.getElementById("saludoUsuario");
+      saludoDiv.innerText = saludo;
+      mensaje.innerText = `❌ Tu ${plan === 'prueba' ? 'periodo de prueba' : 'membresía Premium'} ha expirado.`;
+      mensaje.style.color = 'red';
+    }
+  }
+}
+
+// ✅ Función para activar premium verificando con el backend
+async function activarPremiumConCodigo() {
+  const codigo = document.getElementById('codigoPremium')?.value.trim() || prompt("Introduce el código premium:");
+
+  if (!codigo) {
+    alert("❌ Faltan datos: asegúrate de haber ingresado el código.");
     return;
   }
 
-  const diasPrueba = 7;
-  let inicioPrueba = localStorage.getItem("inicioPrueba");
+  try {
+    // ✅ Solo verificamos el código
+    const verificarResp = await fetch("http://localhost:3000/api/verificarCodigo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ codigo }), // 🔁 Solo el código
+    });
 
-  // ⚠️ Solo crear inicioPrueba si el usuario está autenticado
-  if (!inicioPrueba && estaAutenticado()) {
-    const hoy = new Date().toISOString();
-    localStorage.setItem("inicioPrueba", hoy);
-    inicioPrueba = hoy;
-  }
+    const verificarResultado = await verificarResp.json();
 
-  if (!inicioPrueba) return;
+    if (!verificarResp.ok || !verificarResultado.premiumActivo) {
+      alert(`❌ Código inválido: ${verificarResultado.error || "Código no válido"}`);
+      return;
+    }
 
-  const inicio = new Date(inicioPrueba);
-  const hoy = new Date();
-  const diferenciaDias = Math.floor((hoy - inicio) / (1000 * 60 * 60 * 24));
-  const diasRestantes = diasPrueba - diferenciaDias;
-
-  if (diasRestantes <= 0) {
-    mensaje.innerText = "❌ Tu periodo de prueba ha terminado.";
-    mensaje.style.color = "red";
-  } else {
-    mensaje.innerText = `🧪 Te quedan ${diasRestantes} días de prueba.`;
-    mensaje.style.color = "orange";
-  }
-}
-
-// ✅ Permitir al usuario introducir el código premium
-// Muestra un prompt para ingresar el código; si es correcto, activa Premium
-// También oculta el botón "Activar Premium con código" al activarse
-function activarPremiumConCodigo() {
-  const codigo = prompt("Introduce el código premium:");
-  if (codigo === CODIGO_SECRETO) {
+    // ✅ Guardar localmente y actualizar UI
+    alert(`✅ Acceso Premium Activado (${verificarResultado.plan})\nVálido hasta: ${new Date(verificarResultado.fin).toLocaleDateString()}`);
     localStorage.setItem("codigoPremium", codigo);
-    mostrarMensaje("✅ Acceso Premium Activado");
+    localStorage.setItem("planPremium", verificarResultado.plan);
+    localStorage.setItem("finPremium", verificarResultado.fin);
 
-    // 🔄 Actualizar contenido al instante sin recargar
     mostrarTiempoRestante();
 
-    // Desactivar o ocultar el botón "Activar Premium con código"
     const botonPremium = document.getElementById("botonPremium");
-    if (botonPremium) botonPremium.style.display = "none";  // Oculta el botón
-  } else {
-    mostrarMensaje("❌ Código incorrecto");
+    if (botonPremium) botonPremium.style.display = "none";
+
+  } catch (error) {
+    console.error("❌ Error general:", error);
+    alert("❌ Ocurrió un error al activar Premium");
   }
 }
 
-// Solo ejecutamos las funciones de prueba si el usuario está autenticado
-if (estaAutenticado()) {
-  mostrarTiempoRestante();
-}
 
-const botonPremium = document.getElementById("botonPremium");
 
-// Si el usuario tiene el código Premium, ocultamos el botón
-if (tieneCodigoPremium() && botonPremium) {
-  botonPremium.style.display = "none";
-}
 
-// ✅ Función para verificar si el usuario está autenticado (puedes reusar esta del otro script)
-// Comprueba si existe un authToken en localStorage para determinar autenticación
-function estaAutenticado() {
-  return localStorage.getItem("authToken") !== null;
-}
+
+
+

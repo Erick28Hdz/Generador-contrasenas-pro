@@ -1,0 +1,27 @@
+es/
+
+package*.json
+
+✅ 2. Crear o actualizar tu .gitignore para GitHub Pages
+Crea un archivo .gitignore (si no existe) en la raíz del repositorio que uses para GitHub Pages (frontend) y agrega lo siguiente:
+
+bash
+Copiar
+Editar
+# Ignorar archivos del backend
+server.js
+.env
+api/
+controllers/
+database/
+models/
+routes/
+utils/
+
+# Node.js
+node_modules/
+package.json
+package-lock.json
+
+# Otros archivos que no son frontend
+*.log

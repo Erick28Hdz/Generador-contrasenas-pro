@@ -1,9 +1,3 @@
-/* 
-Script para generar contraseñas seguras, mostrarlas, guardarlas en localStorage, 
-gestionarlas con expiración, mostrarlas en una tabla (integración con Google Sheets), 
-y permitir su copia al portapapeles. Incluye cifrado y descifrado con clave.
-*/
-
 let cuentaRegresivaInterval;
 // Variable global para manejar el intervalo de cuenta regresiva, 
 // así podemos detenerlo cuando expire o se limpie.

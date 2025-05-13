@@ -1,68 +1,74 @@
 // Función para verificar si el usuario está autenticado
 function verificarAutenticacion() {
-    const authToken = localStorage.getItem('authToken'); // Obtener el token guardado en localStorage
+    // Se obtiene el token de autenticación almacenado en el navegador (localStorage)
+    const authToken = localStorage.getItem('authToken');
 
-    // Si el token existe, el usuario está autenticado
-    if (authToken) {
-        desbloquearContenido(); // Mostrar contenido protegido
-        mostrarTiempoRestante(); // Mostrar mensaje de periodo de prueba o acceso premium
-    } else {
-        bloquearContenido(); // Bloquear contenido si no hay token
-    }
+    // Si existe el token, se desbloquea el contenido; si no, se bloquea
+    authToken ? desbloquearContenido() : bloquearContenido();
 }
 
-// Función para manejar el inicio de sesión
-function manejarInicioSesion(token) {
-    // Guardar el token en localStorage
-    localStorage.setItem('authToken', token);
-
-    // Llamar a la función que desbloquea el contenido
-    desbloquearContenido();
-}
-
-// Función para mostrar contenido si el usuario está autenticado
-function mostrarContenido() {
-    const contenidoProtegido = document.getElementById('contenido_protegido'); // Obtener elemento del DOM
-    if (contenidoProtegido) {
-        contenidoProtegido.style.display = 'block'; // Mostrar el contenido protegido
-    }
-
-    document.getElementById('mensaje_bloqueo').style.display = 'none'; // Ocultar mensaje de bloqueo
-}
-
-// Función para bloquear el contenido si el usuario no está autenticado
-function bloquearContenido() {
-    document.getElementById('mensajeBloqueo').innerHTML = '🔐 Debes iniciar sesión con Google para acceder al contenido'; // Mostrar mensaje de bloqueo
-    document.getElementById('contenidoApp').style.display = 'none'; // Ocultar contenido de la app
-    document.getElementById('authorize_button').style.visibility = 'visible'; // Mostrar botón de autorización
-    document.getElementById('signout_button').style.visibility = 'hidden'; // Ocultar botón de cerrar sesión
-
-    // Limpiar el mensaje de periodo de prueba
-    document.getElementById('mensajePeriodoPrueba').innerHTML = '';
-}
-
-// Función para desbloquear el contenido cuando el usuario está autenticado
+// Función para desbloquear el contenido (cuando el usuario está autenticado)
 function desbloquearContenido() {
-    document.getElementById('mensajeBloqueo').innerHTML = ''; // Limpiar mensaje de bloqueo
-    document.getElementById('contenidoApp').style.display = 'block'; // Mostrar contenido de la app
-    document.getElementById('authorize_button').style.visibility = 'hidden'; // Ocultar botón de autorización
-    document.getElementById('signout_button').style.visibility = 'visible'; // Mostrar botón de cerrar sesión
+    // Se obtienen los elementos del DOM necesarios para mostrar el contenido
+    const contenido = document.getElementById('contenidoApp');           // Contenedor principal del contenido
+    const mensajeBloqueo = document.getElementById('mensajeBloqueo');   // Mensaje que se muestra cuando el acceso está bloqueado
+    const authorizeBtn = document.getElementById('authorize_button');   // Botón para autorizar/iniciar sesión
+    const signoutBtn = document.getElementById('signout_button');       // Botón para cerrar sesión
 
-    // Mostrar el mensaje de periodo de prueba o acceso premium
-    mostrarTiempoRestante();
+    // Se muestra el contenido de la aplicación
+    contenido.style.display = 'block';
+
+    // Se limpia cualquier mensaje de bloqueo anterior
+    mensajeBloqueo.innerHTML = '';
+
+    // Se oculta el botón de autorización
+    authorizeBtn.style.visibility = 'hidden';
+
+    // Se muestra el botón para cerrar sesión
+    signoutBtn.style.visibility = 'visible';
+
+    // Se llama a una función para mostrar el tiempo restante (si aplica)
+    mostrarTiempoRestante(); // Esta función debe estar definida en otro lugar si es que se usa
 }
 
-// Función para manejar el cierre de sesión
-function handleSignoutClick() {
-    // Eliminar el token de localStorage
+// Función para bloquear el contenido (cuando el usuario no está autenticado)
+function bloquearContenido() {
+    // Se obtienen los mismos elementos del DOM que en la función anterior
+    const contenido = document.getElementById('contenidoApp');
+    const mensajeBloqueo = document.getElementById('mensajeBloqueo');
+    const authorizeBtn = document.getElementById('authorize_button');
+    const signoutBtn = document.getElementById('signout_button');
+    const periodoPrueba = document.getElementById('mensajePeriodoPrueba'); // Mensaje para periodo de prueba (opcional)
+
+    // Se muestra un mensaje indicando que se debe iniciar sesión
+    mensajeBloqueo.innerHTML = '🔐 Debes iniciar sesión con Google para acceder al contenido';
+
+    // Se oculta el contenido de la aplicación
+    contenido.style.display = 'none';
+
+    // Se muestra el botón para autorizar/iniciar sesión
+    authorizeBtn.style.visibility = 'visible';
+
+    // Se oculta el botón para cerrar sesión
+    signoutBtn.style.visibility = 'hidden';
+
+    // Si existe el mensaje de periodo de prueba, se limpia su contenido
+    if (periodoPrueba) periodoPrueba.innerHTML = '';
+}
+
+// Función para cerrar sesión
+function cerrarSesion() {
+    // Se elimina el token de autenticación del localStorage
     localStorage.removeItem('authToken');
 
-    // Verificar la autenticación y actualizar la UI
+    // Se vuelve a verificar si el usuario está autenticado (para actualizar la interfaz)
     verificarAutenticacion();
 }
 
-// Llamar a la función para verificar autenticación al cargar la página
+// Eventos y ejecución inicial
+
+// Al cargar completamente la página, se verifica si el usuario está autenticado
 window.onload = verificarAutenticacion;
 
-// Asocia el evento de cierre de sesión al botón correspondiente
-document.getElementById('signout_button').addEventListener('click', handleSignoutClick);
+// Se agrega un evento al botón de cerrar sesión para ejecutar la función `cerrarSesion` al hacer clic
+document.getElementById('signout_button').addEventListener('click', cerrarSesion);

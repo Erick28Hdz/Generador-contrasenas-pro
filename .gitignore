@@ -1,17 +1,6 @@
-# Ignorar archivos del backend
-server.js
-.env
-api/
-controllers/
-database/
-models/
-routes/
-utils/
+# Ya no ignores el backend:
+.env 
 
 # Node.js
 node_modules/
-package.json
-package-lock.json
-
-# Otros archivos que no son frontend
 *.log

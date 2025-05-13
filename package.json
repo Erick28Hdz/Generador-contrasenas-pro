@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.2",
+    "nodemailer": "^7.0.3",
+    "uuid": "^11.1.0"
+  },
+  "name": "generador-contrasenas-pro",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Erick28Hdz/Generador-contrasenas-pro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Erick28Hdz/Generador-contrasenas-pro/issues"
+  },
+  "homepage": "https://github.com/Erick28Hdz/Generador-contrasenas-pro#readme"
+}

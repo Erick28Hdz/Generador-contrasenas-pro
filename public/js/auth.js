@@ -21,6 +21,7 @@ async function obtenerGoogleClientId() {
     const response = await fetch('/api/google-config');
     const data = await response.json();
     CLIENT_ID = data.clientId; // Asigna el clientId desde la respuesta del backend
+    console.log("CLIENT_ID:", CLIENT_ID); 
 
     if (CLIENT_ID) {
         // Ahora que tenemos CLIENT_ID, inicializamos GIS

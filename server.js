@@ -23,7 +23,6 @@ app.use(express.json());
 app.use(cors());
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const API_KEY = process.env.GOOGLE_API_KEY;
 
 // ✅ Conexión a la base de datos MongoDB Atlas usando la URI del archivo .env
 mongoose.connect(process.env.MONGODB_URI, {
@@ -43,6 +42,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/google-config', (req, res) => {
+    console.log(process.env.GOOGLE_CLIENT_ID);  // Verifica que el valor esté siendo leído correctamente
     res.json({ clientId: process.env.GOOGLE_CLIENT_ID });
 });
 

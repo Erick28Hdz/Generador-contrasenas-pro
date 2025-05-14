@@ -30,9 +30,13 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(() => console.log('✅ Conectado a MongoDB Atlas')) // Éxito en la conexión
 .catch(err => console.error('❌ Error al conectar a MongoDB:', err)); // Error en la conexión
 
-// ✅ Ruta raíz de prueba para verificar que el servidor está funcionando
+// ✅ Servir archivos estáticos (HTML, CSS, JS, imágenes)
+const path = require('path');
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ✅ Ruta raíz para mostrar el frontend
 app.get('/', (req, res) => {
-    res.send('Servidor funcionando 🚀');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // ✅ Importa las rutas del sistema (cada archivo representa un módulo de tu API)

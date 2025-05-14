@@ -9,37 +9,23 @@ const SCOPES = 'https://www.googleapis.com/auth/userinfo.profile https://www.goo
 let tokenClient;
 let gapiInited = false;
 let gisInited = false;
+let API_KEY = '';
 const CLIENT_ID = '481398224733-ui5jk0ke8bd303aaq1muml9ndn77ouka.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyBCYaZfbQqP4QkS1HnwGEMwc-5J6pNG0kI';
 
 // Ocultar botones de autorizar y cerrar sesión al cargar la página
 document.getElementById('authorize_button').style.visibility = 'hidden';
 document.getElementById('signout_button').style.visibility = 'hidden';
 
-// Llama al backend para obtener el clientId de Google
-async function obtenerGoogleClientId() {
-  try {
-    const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-config');
-    const data = await response.json();
-    CLIENT_ID = data.clientId; // Asigna el clientId desde la respuesta del backend
-    console.log("CLIENT_ID:", CLIENT_ID); 
-
-    if (CLIENT_ID) {
-        // Ahora que tenemos CLIENT_ID, inicializamos GIS
-        tokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: CLIENT_ID,  // Ya tiene el clientId desde el backend
-            scope: SCOPES,
-            callback: '', // Definir el callback cuando se haga login
-        });
-
-        gisInited = true;
-        maybeEnableButtons(); // Verifica si se pueden habilitar los botones
-    } else {
-        console.error("❌ No se pudo obtener el clientId correctamente");
+async function obtenerApiKey() {
+    try {
+        const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-api-key');
+        const data = await response.json();
+        const apiKey = data.apiKey;
+        console.log("API_KEY:", apiKey); 
+        // Usa la API key según lo necesites
+    } catch (err) {
+        console.error('Error al obtener la API Key:', err);
     }
-  } catch (err) {
-    console.error('❌ Error al obtener el clientId de Google:', err);
-  }
 }
 
 // Función llamada cuando se carga la librería gapi

@@ -20,17 +20,21 @@ async function obtenerGoogleClientId() {
   try {
     const response = await fetch('/api/google-config');
     const data = await response.json();
-    CLIENT_ID = data.clientId;
+    CLIENT_ID = data.clientId; // Asigna el clientId desde la respuesta del backend
 
-    // ✅ Ahora que tenemos CLIENT_ID, inicializamos GIS
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: '', // Se define antes de iniciar sesión
-    });
+    if (CLIENT_ID) {
+        // Ahora que tenemos CLIENT_ID, inicializamos GIS
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,  // Ya tiene el clientId desde el backend
+            scope: SCOPES,
+            callback: '', // Definir el callback cuando se haga login
+        });
 
-    gisInited = true;
-    maybeEnableButtons(); // Ya puedes mostrar botones si gapi también está listo
+        gisInited = true;
+        maybeEnableButtons(); // Verifica si se pueden habilitar los botones
+    } else {
+        console.error("❌ No se pudo obtener el clientId correctamente");
+    }
   } catch (err) {
     console.error('❌ Error al obtener el clientId de Google:', err);
   }

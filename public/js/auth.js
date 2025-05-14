@@ -8,8 +8,8 @@ const SCOPES = 'https://www.googleapis.com/auth/userinfo.profile https://www.goo
 let tokenClient;
 let gapiInited = false;
 let gisInited = false;
-const CLIENT_ID = '481398224733-ui5jk0ke8bd303aaq1muml9ndn77ouka.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyBCYaZfbQqP4QkS1HnwGEMwc-5J6pNG0kI';
+let CLIENT_ID = '';
+let API_KEY = '';
 
 // Ocultar botones de autorizar y cerrar sesión al cargar la página
 document.getElementById('authorize_button').style.visibility = 'hidden';
@@ -20,8 +20,8 @@ async function obtenerGoogleClientId() {
   try {
     const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-config');
     const data = await response.json();
-    CLIENT_ID = data.clientId; // Asigna el clientId desde la respuesta del backend
-    console.log("CLIENT_ID:", CLIENT_ID); 
+    CLIENT_ID = data.clientId;
+    API_KEY = data.apiKey;
 
     if (CLIENT_ID) {
         // Ahora que tenemos CLIENT_ID, inicializamos GIS

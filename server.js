@@ -60,4 +60,7 @@ app.use("/api", webhookRoutes);              // ej: POST /api/webhook
 app.use('/api', verificarCodigoRoutes);      // ej: POST /api/verificarCodigo
 app.use('/api', estadoUsuarioRoutes);        // ej: GET /api/estadoUsuario/:correo
 
-
+// ✅ Inicia el servidor en el puerto especificado
+app.listen(PORT, () => {
+    console.log(`Servidor escuchando en https://https://generador-contrasenas-pro.onrender.com:${PORT}`);
+});

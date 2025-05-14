@@ -1,9 +1,3 @@
-// ID de cliente de Google (OAuth 2.0) 
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-
-// Clave de API para acceder a los servicios de Google
-const API_KEY = process.env.GOOGLE_API_KEY;
-
 // Documento de descubrimiento para Google Sheets API v4
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
 
@@ -11,13 +5,27 @@ const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
 const SCOPES = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
 
 // Variables de control de estado
-let tokenClient;   // Cliente de token de Google Identity Services
-let gapiInited = false; // Bandera: indica si gapi fue inicializado
-let gisInited = false;  // Bandera: indica si GIS fue inicializado
+let tokenClient;
+let gapiInited = false;
+let gisInited = false;
+let CLIENT_ID = null;
+const API_KEY = 'AIzaSyBCYaZfbQqP4QkS1HnwGEMwc-5J6pNG0kI';
 
 // Ocultar botones de autorizar y cerrar sesión al cargar la página
 document.getElementById('authorize_button').style.visibility = 'hidden';
 document.getElementById('signout_button').style.visibility = 'hidden';
+
+// Llama al backend para obtener el clientId de Google
+async function obtenerGoogleClientId() {
+  try {
+    const response = await fetch('/api/google-config');
+    const data = await response.json();
+    CLIENT_ID = data.clientId;
+    iniciarGoogleLogin(); // Solo iniciar después de tener el clientId
+  } catch (err) {
+    console.error('❌ Error al obtener el clientId de Google:', err);
+  }
+}
 
 // Función llamada cuando se carga la librería gapi
 function gapiLoaded() {

@@ -13,6 +13,9 @@ const cors = require('cors');
 // ✅ Crea una instancia de la aplicación Express
 const app = express();
 
+// ✅ Define el puerto en el que el servidor escuchará (desde .env o por defecto el 3000)
+const PORT = process.env.PORT || 3000;
+
 // ✅ Middleware para analizar JSON en las peticiones (req.body)
 app.use(express.json());
 
@@ -52,5 +55,5 @@ app.use('/api', estadoUsuarioRoutes);        // ej: GET /api/estadoUsuario/:corr
 
 // ✅ Inicia el servidor en el puerto especificado
 app.listen(PORT, () => {
-    console.log(`Servidor escuchando en https://https://generador-contrasenas-pro.onrender.com`);
+    console.log(`Servidor escuchando en https://https://generador-contrasenas-pro.onrender.com:${PORT}`);
 });

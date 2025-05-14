@@ -23,7 +23,7 @@ async function obtenerGoogleClientId() {
     CLIENT_ID = data.clientId;
     API_KEY = data.apiKey;
 
-    if (CLIENT_ID) {
+    if (CLIENT_ID && API_KEY) {
         // Ahora que tenemos CLIENT_ID, inicializamos GIS
         tokenClient = google.accounts.oauth2.initTokenClient({
             client_id: CLIENT_ID,  // Ya tiene el clientId desde el backend

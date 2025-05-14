@@ -1,3 +1,6 @@
+// Cargar variables de entorno desde el archivo .env
+require('dotenv').config();
+
 // ID de cliente de Google (OAuth 2.0) 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 

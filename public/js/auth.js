@@ -223,7 +223,7 @@ async function obtenerEstadoUsuarioDesdeServidor() {
     const { email, name } = userInfo;
 
     try {
-        const response = await fetch('https://generador-contrasenas-pro-nzqx-198hbdzwq.vercel.app/api/estadoUsuario', {
+        const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/estadoUsuario', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

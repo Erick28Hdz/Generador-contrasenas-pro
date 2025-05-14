@@ -22,6 +22,8 @@ app.use(express.json());
 // ✅ Middleware CORS: permite que cualquier dominio pueda hacer peticiones al servidor (ideal para desarrollo)
 app.use(cors());
 
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+
 // ✅ Conexión a la base de datos MongoDB Atlas usando la URI del archivo .env
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -40,19 +42,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/google-config', (req, res) => {
-    const origin = req.get('Origin');
-    if (origin !== 'https://generador-contrasenas-pro.onrender.com/') {
-        return res.status(403).json({ error: 'Acceso denegado' });
-    }
-
-    res.json({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        apiKey: process.env.GOOGLE_API_KEY
-    });
+    console.log(process.env.GOOGLE_CLIENT_ID);  // Verifica que el valor esté siendo leído correctamente
+    res.json({ clientId: process.env.GOOGLE_CLIENT_ID });
 });
-
-const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const API_KEY = process.env.GOOGLE_API_KEY;
 
 // ✅ Importa las rutas del sistema (cada archivo representa un módulo de tu API)
 const userRoutes = require('./routes/user');                     // Rutas para registrar/gestionar usuarios

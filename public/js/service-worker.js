@@ -3,17 +3,17 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('pwacache').then(cache => {
       return cache.addAll([
-        '/Generador-contrasenas-pro/public/index.html',
-        '/Generador-contrasenas-pro/public/css/style.css',
-        '/Generador-contrasenas-pro/public/js/auth.js',
-        '/Generador-contrasenas-pro/public/js/main.js',
-        '/Generador-contrasenas-pro/public/js/bloqueo.js',
-        '/Generador-contrasenas-pro/public/js/cifrado.js',
-        '/Generador-contrasenas-pro/public/js/prueba.js',
-        '/Generador-contrasenas-pro/public/js/sheets.js',
-        '/Generador-contrasenas-pro/public/manifest.json',
-        '/Generador-contrasenas-pro/public/image/icon-256.png',
-        '/Generador-contrasenas-pro/public/image/icon-512.png'
+        '/',
+        '/css/style.css',
+        '/js/auth.js',
+        '/js/main.js',
+        '/js/bloqueo.js',
+        '/js/cifrado.js',
+        '/js/prueba.js',
+        '/js/sheets.js',
+        '/manifest.json',
+        '/image/icon-256.png',
+        '/image/icon-512.png'
       ]);
     })
   );

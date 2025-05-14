@@ -18,7 +18,7 @@ document.getElementById('signout_button').style.visibility = 'hidden';
 // Llama al backend para obtener el clientId de Google
 async function obtenerGoogleClientId() {
   try {
-    const response = await fetch('/api/google-config');
+    const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-config');
     const data = await response.json();
     CLIENT_ID = data.clientId; // Asigna el clientId desde la respuesta del backend
     console.log("CLIENT_ID:", CLIENT_ID); 

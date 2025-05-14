@@ -22,13 +22,16 @@ app.use(express.json());
 // ✅ Middleware CORS: permite que cualquier dominio pueda hacer peticiones al servidor (ideal para desarrollo)
 app.use(cors());
 
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const API_KEY = process.env.GOOGLE_API_KEY;
+
 // ✅ Conexión a la base de datos MongoDB Atlas usando la URI del archivo .env
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-.then(() => console.log('✅ Conectado a MongoDB Atlas')) // Éxito en la conexión
-.catch(err => console.error('❌ Error al conectar a MongoDB:', err)); // Error en la conexión
+    .then(() => console.log('✅ Conectado a MongoDB Atlas')) // Éxito en la conexión
+    .catch(err => console.error('❌ Error al conectar a MongoDB:', err)); // Error en la conexión
 
 // ✅ Servir archivos estáticos (HTML, CSS, JS, imágenes)
 const path = require('path');
@@ -37,6 +40,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ✅ Ruta raíz para mostrar el frontend
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/api/google-config', (req, res) => {
+    res.json({ clientId: process.env.GOOGLE_CLIENT_ID });
 });
 
 // ✅ Importa las rutas del sistema (cada archivo representa un módulo de tu API)
@@ -53,7 +60,4 @@ app.use("/api", webhookRoutes);              // ej: POST /api/webhook
 app.use('/api', verificarCodigoRoutes);      // ej: POST /api/verificarCodigo
 app.use('/api', estadoUsuarioRoutes);        // ej: GET /api/estadoUsuario/:correo
 
-// ✅ Inicia el servidor en el puerto especificado
-app.listen(PORT, () => {
-    console.log(`Servidor escuchando en https://https://generador-contrasenas-pro.onrender.com:${PORT}`);
-});
+

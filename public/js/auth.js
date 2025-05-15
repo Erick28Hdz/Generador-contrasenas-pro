@@ -9,9 +9,8 @@ const SCOPES = 'https://www.googleapis.com/auth/userinfo.profile https://www.goo
 let tokenClient;
 let gapiInited = false;
 let gisInited = false;
-let API_KEY = '';
 const CLIENT_ID = '481398224733-ui5jk0ke8bd303aaq1muml9ndn77ouka.apps.googleusercontent.com';
-
+let API_KEY = '';
 
 // Ocultar botones de autorizar y cerrar sesión al cargar la página
 document.getElementById('authorize_button').style.visibility = 'hidden';

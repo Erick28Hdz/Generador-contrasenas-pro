@@ -12,10 +12,12 @@ let gisInited = false;
 let API_KEY = '';
 const CLIENT_ID = '481398224733-ui5jk0ke8bd303aaq1muml9ndn77ouka.apps.googleusercontent.com';
 
+
 // Ocultar botones de autorizar y cerrar sesión al cargar la página
 document.getElementById('authorize_button').style.visibility = 'hidden';
 document.getElementById('signout_button').style.visibility = 'hidden';
 
+// Llama al backend para obtener el clientId de Google
 async function obtenerApiKey() {
     try {
         const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-api-key');

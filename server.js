@@ -41,8 +41,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get('/api/google-api-key', (req, res) => {
-  res.json({ apiKey: process.env.GOOGLE_API_KEY });
+app.get('/api/google-config', (req, res) => {
+    console.log(process.env.GOOGLE_API_KEY);  // Verifica que el valor esté siendo leído correctamente
+    res.json({ clientId: process.env.GOOGLE_API_KEY });
 });
 
 // ✅ Importa las rutas del sistema (cada archivo representa un módulo de tu API)

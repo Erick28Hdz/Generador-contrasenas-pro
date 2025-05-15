@@ -18,16 +18,29 @@ document.getElementById('authorize_button').style.visibility = 'hidden';
 document.getElementById('signout_button').style.visibility = 'hidden';
 
 // Llama al backend para obtener el clientId de Google
-async function obtenerApiKey() {
-    try {
-        const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-api-key');
-        const data = await response.json();
-        const apiKey = data.apiKey;
-        console.log("API_KEY:", apiKey); 
-        // Usa la API key según lo necesites
-    } catch (err) {
-        console.error('Error al obtener la API Key:', err);
+async function obtenerGoogleClientId() {
+  try {
+    const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-config');
+    const data = await response.json();
+    API_KEY = data.apiKey; // Asigna el clientId desde la respuesta del backend
+    console.log("API_KEY:", API_KEY); 
+
+    if (API_KEY) {
+        
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            apiKey: API_KEY,  // Ya tiene el clientId desde el backend
+            scope: SCOPES,
+            callback: '', // Definir el callback cuando se haga login
+        });
+
+        gisInited = true;
+        maybeEnableButtons(); // Verifica si se pueden habilitar los botones
+    } else {
+        console.error("❌ No se pudo obtener el clientId correctamente");
     }
+  } catch (err) {
+    console.error('❌ Error al obtener el clientId de Google:', err);
+  }
 }
 
 // Función llamada cuando se carga la librería gapi

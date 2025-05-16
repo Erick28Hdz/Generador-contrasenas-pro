@@ -45,4 +45,4 @@ Correo: erick.hdz9628@gmail.com
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - consulta el archivo [LICENSE] para más detalles.
+Este proyecto está bajo la Licencia MIT - consulta el archivo [MIT license] para más detalles.

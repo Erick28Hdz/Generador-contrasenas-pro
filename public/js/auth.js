@@ -202,7 +202,7 @@ function handleAuthClick() {
 
             if (checkUser.status === 404) {
                 // 2. Si no existe (status 404), lo crea
-                const createUser = await fetch('https://generador-contrasenas-pro.onrender.com//api/membresia/', {
+                const createUser = await fetch('https://generador-contrasenas-pro.onrender.com/api/membresia/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

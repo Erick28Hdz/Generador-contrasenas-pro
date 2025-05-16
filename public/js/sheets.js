@@ -6,7 +6,12 @@ document.getElementById('createSpreadsheet').addEventListener('click', async () 
     // Si ya existe un spreadsheet guardado
     if (existingSpreadsheetId) {
         // Muestra un cuadro de confirmación al usuario para preguntar si quiere crear uno nuevo
-        const confirmNew = confirm('⚠️ Ya tienes un archivo creado. ¿Quieres crear uno nuevo?');
+        const confirmNew = await mostrarModalInput({
+            titulo: '⚠️ Archivo ya existe',
+            mensaje: 'Ya tienes un archivo creado. ¿Quieres crear uno nuevo?',
+            textoBotonConfirmar: 'Sí, crear nuevo',
+            textoBotonCancelar: 'No, cancelar'
+        });
         // Si el usuario cancela, muestra mensaje de cancelación y termina la función
         if (!confirmNew) {
             mostrarMensaje('❌ Creación de nuevo archivo cancelada.');

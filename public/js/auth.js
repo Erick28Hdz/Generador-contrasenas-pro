@@ -308,7 +308,7 @@ function handleSignoutClick() {
     // Vuelve a verificar el estado de autenticación para ajustar la interfaz
     verificarAutenticacion();
     limpiarCamposInterfaz();
-    alert("¡Has cerrado sesión correctamente!");
+    mostrarMensaje("¡Has cerrado sesión correctamente!");
 }
 
 // ✅ Verifica si el usuario está autenticado actualmente

@@ -406,7 +406,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Pide al usuario una palabra clave para asociar a la contraseña
-        const keyword = prompt('📝 Escribe la palabra clave para recordar dónde usarás esta contraseña:');
+        const keyword = await mostrarModalInput({
+            titulo: '📝 Palabra Clave',
+            mensaje: '¿Dónde usarás esta contraseña?',
+            placeholder: 'Ej: correo, banco, app...'
+        });
 
         // Si no se escribe palabra clave, avisa al usuario y termina
         if (keyword === null || keyword.trim() === "") {
@@ -437,7 +441,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 🔐 CIFRADO SIEMPRE ACTIVADO
         // Pide una clave al usuario para cifrar la contraseña
-        const clave = prompt("🔐 Introduce una clave para cifrar esta contraseña:");
+        const clave = await mostrarModalInput({
+            titulo: '🔐 Clave de Cifrado',
+            mensaje: 'Introduce una clave para cifrar esta contraseña:',
+            placeholder: 'Tu clave secreta...'
+        });
         // Si no se da clave, avisa al usuario y termina
         if (!clave) {
             mostrarMensaje("❌ No se puede cifrar sin clave.");

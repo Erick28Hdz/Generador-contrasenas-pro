@@ -28,9 +28,9 @@ async function enviarCorreoRegistro(correo, plan, name) {
         text: `¡Gracias por tu suscripción al plan ${plan}!\n`,
         html: `
                 <div
-                    style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+                    style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 2px solid #ddd; border-radius: 10px;">
                     <h1 style="color: #2c3e50;">🔐 Bienvenidx a Generador PRO</h1>
-                    <p><b>Hola, ${name}</b>,</p>
+                    <p><b>Hola, ${name}</b></p>
 
                     <p>
                     Gracias por tu interés en fortalecer tu seguridad digital. <b>Generador PRO</b> es una herramienta diseñada
@@ -59,14 +59,14 @@ async function enviarCorreoRegistro(correo, plan, name) {
                     <table role="presentation" style="width: 100%; max-width: 600px; margin: 0 auto; text-align: center;">
                         <tr>
                             <td style="padding: 10px;">
-                            <a href="https://biz.payulatam.com/L0fa08c7DB81587" target="_blank" style="text-decoration: none;">
-                                <img src="https://tusitio.com/image/membresia-mensual.png" alt="Pago Mensual" style="width: 120px;">
+                            <a href="https://biz.payulatam.com/L0fa08cEA503774" target="_blank" style="text-decoration: none;">
+                                <img src="https://generador-contrasenas-pro.onrender.com/image/membresia-mensual.png" alt="Pago Mensual" style="width: 120px;">
                                 <div style="background-color: #27ae60; color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold;">Pagar Mensual</div>
                             </a>
                             </td>
                             <td style="padding: 10px;">
                             <a href="https://biz.payulatam.com/B0fa08c7DB81587" target="_blank" style="text-decoration: none;">
-                                <img src="https://tusitio.com/image/membresia-anual.png" alt="Pago Anual" style="width: 120px;">
+                                <img src="https://generador-contrasenas-pro.onrender.com/image/membresia-anual.png" alt="Pago Anual" style="width: 120px;">
                                 <div style="background-color: #2980b9; color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold;">Pagar Anual</div>
                             </a>
                             </td>
@@ -107,9 +107,9 @@ async function enviarCorreoCompra(correo, plan, name, codigoGenerado) {
         text: `Gracias por tu compra del plan ${plan}.\n\nTu código único es: ${codigoGenerado}\n\n¡Bienvenido!`,
         html: `
     <div
-        style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+        style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 2px solid #ddd; border-radius: 10px;">
         <h1 style="color: #2c3e50;">🎉 ¡Tu compra ha sido confirmada!</h1>
-        <p><b>Hola, ${name}</b>,</p>
+        <p><b>Hola, ${name}</b></p>
 
         <p>
         Gracias por confiar en <b>Generador PRO</b> y realizar tu compra. Estamos felices de tenerte como parte de nuestra comunidad. 

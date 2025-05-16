@@ -56,10 +56,14 @@ function mostrarTiempoRestante() {
 
 // ✅ Función para activar premium verificando con el backend
 async function activarPremiumConCodigo() {
-  const codigo = document.getElementById('codigoPremium')?.value.trim() || prompt("Introduce el código premium:");
+  const codigo = document.getElementById('codigoPremium')?.value.trim() || await mostrarModalInput({
+    titulo: '⭐ Código Premium',
+    mensaje: 'Introduce el código premium:',
+    placeholder: 'Código Premium...'
+  });
 
   if (!codigo) {
-    alert("❌ Faltan datos: asegúrate de haber ingresado el código.");
+    mostrarMensaje("❌ Faltan datos: asegúrate de haber ingresado el código.");
     return;
   }
 
@@ -74,12 +78,12 @@ async function activarPremiumConCodigo() {
     const verificarResultado = await verificarResp.json();
 
     if (!verificarResp.ok || !verificarResultado.premiumActivo) {
-      alert(`❌ Código inválido: ${verificarResultado.error || "Código no válido"}`);
+      mostrarMensaje(`❌ Código inválido: ${verificarResultado.error || "Código no válido"}`);
       return;
     }
 
     // ✅ Guardar localmente y actualizar UI
-    alert(`✅ Acceso Premium Activado (${verificarResultado.plan})\nVálido hasta: ${new Date(verificarResultado.fin).toLocaleDateString()}`);
+    mostrarMensaje(`✅ Acceso Premium Activado (${verificarResultado.plan})\nVálido hasta: ${new Date(verificarResultado.fin).toLocaleDateString()}`);
     localStorage.setItem("codigoPremium", codigo);
     localStorage.setItem("planPremium", verificarResultado.plan);
     localStorage.setItem("finPremium", verificarResultado.fin);
@@ -91,7 +95,7 @@ async function activarPremiumConCodigo() {
 
   } catch (error) {
     console.error("❌ Error general:", error);
-    alert("❌ Ocurrió un error al activar Premium");
+    mostrarMensaje("❌ Ocurrió un error al activar Premium");
   }
 }
 

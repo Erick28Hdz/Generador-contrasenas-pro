@@ -90,17 +90,21 @@ const cifrado = {
  * @param {string} textoCifrado - El texto cifrado (o texto plano si no se usó cifrado).
  */
 async function mostrarContrasenaGuardada(textoCifrado) {
-    const clave = prompt("🔓 Introduce la clave para descifrar:");
+    const clave = await mostrarModalInput({
+        titulo: '🔓 Clave de Descifrado',
+        mensaje: 'Introduce la clave para descifrar:',
+        placeholder: 'Tu clave secreta...'
+    });
     if (!clave) {
         mostrarMensaje("❌ Clave requerida.");
         return;
     }
     try {
         const descifrada = await cifrado.descifrarTexto(textoCifrado, clave);
-        
+
         // Copiar automáticamente al portapapeles
         await navigator.clipboard.writeText(descifrada);
-        
+
         mostrarMensaje(`🔓 Contraseña: ${descifrada}\n ✅ Copiada al portapapeles`);
     } catch (err) {
         mostrarMensaje("❌ Clave incorrecta o formato inválido.");

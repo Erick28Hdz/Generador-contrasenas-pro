@@ -257,3 +257,55 @@ async function mostrarTablaContraseñas() {
     mostrarMensaje('❌ Error al obtener las contraseñas. Verifica el ID, la API o la conexión.');
   }
 }
+
+function mostrarModalInput({ titulo = 'Ingresar dato', mensaje = '', placeholder = '', aceptarTexto = 'Aceptar', cancelarTexto = 'Cancelar' }) {
+  return new Promise((resolve) => {
+    // Crea el fondo oscuro
+    const fondo = document.createElement('div');
+    fondo.className = 'modal-fondo';
+
+    // Crea el modal
+    const modal = document.createElement('div');
+    modal.className = 'modal-contenedor';
+    modal.innerHTML = `
+      <h3>${titulo}</h3>
+      <p>${mensaje}</p>
+      <input type="text" class="modal-input" placeholder="${placeholder}" />
+      <div class="modal-botones">
+        <button class="modal-aceptar">${aceptarTexto}</button>
+        <button class="modal-cancelar">${cancelarTexto}</button>
+      </div>
+    `;
+
+    fondo.appendChild(modal);
+    document.body.appendChild(fondo);
+
+    const input = modal.querySelector('.modal-input');
+    input.focus();
+
+    // Cerrar con aceptar
+    modal.querySelector('.modal-aceptar').addEventListener('click', () => {
+      const valor = input.value.trim();
+      document.body.removeChild(fondo);
+      resolve(valor || null);
+    });
+
+    // Cerrar con cancelar
+    modal.querySelector('.modal-cancelar').addEventListener('click', () => {
+      document.body.removeChild(fondo);
+      resolve(null);
+    });
+
+    // Cerrar con ESC
+    fondo.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.body.removeChild(fondo);
+        resolve(null);
+      }
+    });
+
+    // Activar captura de teclado
+    fondo.tabIndex = 0;
+    fondo.focus();
+  });
+}

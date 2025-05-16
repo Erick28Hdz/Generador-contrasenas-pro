@@ -60,11 +60,6 @@ app.use("/api", webhookRoutes);              // ej: POST /api/webhook
 app.use('/api', verificarCodigoRoutes);      // ej: POST /api/verificarCodigo
 app.use('/api', estadoUsuarioRoutes);        // ej: GET /api/estadoUsuario/:correo
 
-// ⚠️ Captura todas las rutas no encontradas (después de las API)
-app.use('/api/*', (req, res) => {
-    res.status(404).json({ error: 'Ruta API no encontrada' });
-});
-
 // ✅ Inicia el servidor en el puerto especificado
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en https://generador-contrasenas-pro.onrender.com:${PORT}`);

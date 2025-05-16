@@ -377,116 +377,122 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // Asigna evento al botón de guardar contraseña
-    document.getElementById('saveButton').addEventListener('click', async () => {
-        // 🚀 PRIMERO: toma el ID del input (si existe), o localStorage
-        let spreadsheetIdInput = document.getElementById('spreadsheetIdInput').value.trim();
-        let spreadsheetId = spreadsheetIdInput || localStorage.getItem('spreadsheetId');
-        // Si no hay spreadsheet, avisa al usuario y termina
-        if (!spreadsheetId) {
-            mostrarMensaje('⚠️ Primero debes crear o cargar el archivo antes de guardar contraseñas.');
-            return;
-        }
+    document.addEventListener('click', async function (e) {
+        if (e.target && e.target.id === 'saveButton') {
+            // Asigna evento al botón de guardar contraseña
+            document.getElementById('saveButton').addEventListener('click', async () => {
+                // 🚀 PRIMERO: toma el ID del input (si existe), o localStorage
+                let spreadsheetIdInput = document.getElementById('spreadsheetIdInput').value.trim();
+                let spreadsheetId = spreadsheetIdInput || localStorage.getItem('spreadsheetId');
+                // Si no hay spreadsheet, avisa al usuario y termina
+                if (!spreadsheetId) {
+                    mostrarMensaje('⚠️ Primero debes crear o cargar el archivo antes de guardar contraseñas.');
+                    return;
+                }
 
-        // Obtiene el valor del campo de longitud de la contraseña
-        const length = document.getElementById('length').value;
-        // Obtiene la contraseña generada mostrada en pantalla
-        let password = document.getElementById('result').innerText;
+                // Obtiene el valor del campo de longitud de la contraseña
+                const length = document.getElementById('length').value;
+                // Obtiene la contraseña generada mostrada en pantalla
+                let password = document.getElementById('result').innerText;
 
-        // Si no hay contraseña generada, avisa al usuario y termina
-        if (!password) {
-            mostrarMensaje('⚠️ No has generado ninguna contraseña. Usa el generador primero.');
-            return;
-        }
+                // Si no hay contraseña generada, avisa al usuario y termina
+                if (!password) {
+                    mostrarMensaje('⚠️ No has generado ninguna contraseña. Usa el generador primero.');
+                    return;
+                }
 
-        // ⛔ Si ya se guardó esta contraseña, bloquea el guardado
-        if (passwordAlreadySaved) {
-            mostrarMensaje('⚠️ Ya guardaste esta contraseña. Por favor, genera una nueva antes de guardar otra vez.');
-            return;
-        }
+                // ⛔ Si ya se guardó esta contraseña, bloquea el guardado
+                if (passwordAlreadySaved) {
+                    mostrarMensaje('⚠️ Ya guardaste esta contraseña. Por favor, genera una nueva antes de guardar otra vez.');
+                    return;
+                }
 
-        // Pide al usuario una palabra clave para asociar a la contraseña
-        const keyword = await mostrarModalInput({
-            titulo: '📝 Palabra Clave',
-            mensaje: '¿Dónde usarás esta contraseña?',
-            placeholder: 'Ej: correo, banco, app...'
-        });
+                // Pide al usuario una palabra clave para asociar a la contraseña
+                const keyword = await mostrarModalInput({
+                    titulo: '📝 Palabra Clave',
+                    mensaje: '¿Dónde usarás esta contraseña?',
+                    placeholder: 'Ej: correo, banco, app...'
+                });
 
-        // Si no se escribe palabra clave, avisa al usuario y termina
-        if (keyword === null || keyword.trim() === "") {
-            mostrarMensaje('⚠️ No escribiste una palabra clave. No se guardó la contraseña.');
-            return;
-        }
+                // Si no se escribe palabra clave, avisa al usuario y termina
+                if (keyword === null || keyword.trim() === "") {
+                    mostrarMensaje('⚠️ No escribiste una palabra clave. No se guardó la contraseña.');
+                    return;
+                }
 
-        // Obtiene los minutos de expiración seleccionados
-        const expMinutes = parseInt(document.getElementById('expTime').value);
+                // Obtiene los minutos de expiración seleccionados
+                const expMinutes = parseInt(document.getElementById('expTime').value);
 
-        // Variable para almacenar la fecha formateada de expiración
-        let formattedExpTime;
+                // Variable para almacenar la fecha formateada de expiración
+                let formattedExpTime;
 
-        // Obtiene la hora actual
-        const now = new Date();
+                // Obtiene la hora actual
+                const now = new Date();
 
-        // Si se seleccionó tiempo de expiración, calcula la fecha futura formateada
-        if (expMinutes > 0) {
-            now.setMinutes(now.getMinutes() + expMinutes);
-            formattedExpTime = `${now.getDate().toString().padStart(2, '0')}/` +
-                `${(now.getMonth() + 1).toString().padStart(2, '0')}/` +
-                `${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:` +
-                `${now.getMinutes().toString().padStart(2, '0')}`;
-        } else {
-            // Si no se expirará, marca como "Sin expiración"
-            formattedExpTime = 'Sin expiración';
-        }
+                // Si se seleccionó tiempo de expiración, calcula la fecha futura formateada
+                if (expMinutes > 0) {
+                    now.setMinutes(now.getMinutes() + expMinutes);
+                    formattedExpTime = `${now.getDate().toString().padStart(2, '0')}/` +
+                        `${(now.getMonth() + 1).toString().padStart(2, '0')}/` +
+                        `${now.getFullYear()} ${now.getHours().toString().padStart(2, '0')}:` +
+                        `${now.getMinutes().toString().padStart(2, '0')}`;
+                } else {
+                    // Si no se expirará, marca como "Sin expiración"
+                    formattedExpTime = 'Sin expiración';
+                }
 
-        // 🔐 CIFRADO SIEMPRE ACTIVADO
-        // Pide una clave al usuario para cifrar la contraseña
-        const clave = await mostrarModalInput({
-            titulo: '🔐 Clave de Cifrado',
-            mensaje: 'Introduce una clave para cifrar esta contraseña:',
-            placeholder: 'Tu clave secreta...'
-        });
-        // Si no se da clave, avisa al usuario y termina
-        if (!clave) {
-            mostrarMensaje("❌ No se puede cifrar sin clave.");
-            return;
-        }
+                // 🔐 CIFRADO SIEMPRE ACTIVADO
+                // Pide una clave al usuario para cifrar la contraseña
+                const clave = await mostrarModalInput({
+                    titulo: '🔐 Clave de Cifrado',
+                    mensaje: 'Introduce una clave para cifrar esta contraseña:',
+                    placeholder: 'Tu clave secreta...'
+                });
+                // Si no se da clave, avisa al usuario y termina
+                if (!clave) {
+                    mostrarMensaje("❌ No se puede cifrar sin clave.");
+                    return;
+                }
 
-        try {
-            // Cifra la contraseña usando la clave proporcionada
-            password = await cifrado.cifrarTexto(password, clave);
-        } catch (e) {
-            // Si hay error al cifrar, avisa al usuario y lo muestra en consola
-            mostrarMensaje("❌ Error al cifrar la contraseña.");
-            console.error(e);
-            return;
-        }
+                try {
+                    // Cifra la contraseña usando la clave proporcionada
+                    password = await cifrado.cifrarTexto(password, clave);
+                } catch (e) {
+                    // Si hay error al cifrar, avisa al usuario y lo muestra en consola
+                    mostrarMensaje("❌ Error al cifrar la contraseña.");
+                    console.error(e);
+                    return;
+                }
 
-        // Obtiene el último número de secuencia registrado en la hoja
-        const lastSequenceNumber = await getLastSequenceNumber(spreadsheetId);
-        // Calcula el nuevo número de secuencia
-        const newSequenceNumber = lastSequenceNumber + 1;
+                // Obtiene el último número de secuencia registrado en la hoja
+                const lastSequenceNumber = await getLastSequenceNumber(spreadsheetId);
+                // Calcula el nuevo número de secuencia
+                const newSequenceNumber = lastSequenceNumber + 1;
 
-        // Prepara los valores a guardar en el spreadsheet
-        const values = [
-            newSequenceNumber, // Número secuencial
-            length,            // Longitud de la contraseña
-            formattedExpTime,  // Fecha de expiración formateada
-            password,          // Contraseña cifrada
-            keyword            // Palabra clave
-        ];
+                // Prepara los valores a guardar en el spreadsheet
+                const values = [
+                    newSequenceNumber, // Número secuencial
+                    length,            // Longitud de la contraseña
+                    formattedExpTime,  // Fecha de expiración formateada
+                    password,          // Contraseña cifrada
+                    keyword            // Palabra clave
+                ];
 
-        // Agrega los datos al spreadsheet
-        await appendDataToSpreadsheet(spreadsheetId, values);
-        // Muestra mensaje de éxito al usuario
-        mostrarMensaje('✅ Contraseña guardada');
-        // ✅ Marca que la contraseña actual ya fue guardada
-        passwordAlreadySaved = true;
-        // ✅ Si la tabla está cargada en pantalla, actualízala automáticamente
-        if (window.tablaCargada) {
-            await mostrarTablaContraseñas();
+                // Agrega los datos al spreadsheet
+                await appendDataToSpreadsheet(spreadsheetId, values);
+                // Muestra mensaje de éxito al usuario
+                mostrarMensaje('✅ Contraseña guardada');
+                // ✅ Marca que la contraseña actual ya fue guardada
+                passwordAlreadySaved = true;
+                // ✅ Si la tabla está cargada en pantalla, actualízala automáticamente
+                if (window.tablaCargada) {
+                    await mostrarTablaContraseñas();
+                }
+            });
         }
     });
+
+
 
     // Asigna evento al botón de limpiar contraseñas expiradas
     document.getElementById('cleanExpired').addEventListener('click', async () => {

@@ -12,6 +12,7 @@ const cors = require('cors');
 
 // ✅ Crea una instancia de la aplicación Express
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 
 // ✅ Define el puerto en el que el servidor escuchará (desde .env o por defecto el 3000)
 const PORT = process.env.PORT || 3000;

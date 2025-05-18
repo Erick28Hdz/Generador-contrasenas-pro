@@ -40,7 +40,7 @@ async function recibirConfirmacionPayU(req, res) {
       return res.status(403).send("❌ Firma digital no válida");
     }
 
-    const estado = data.estado_pol;
+    const estado = data.state_pol;
     const correo = data.email_buyer || data.buyerEmail || data.payerEmail;
 
     if (!correo) {

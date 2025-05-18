@@ -25,10 +25,15 @@ async function recibirConfirmacionPayU(req, res) {
     // En algunos casos PayU manda el valor con decimales extra, asegúrate de redondear a dos cifras
     const valor = parseFloat(value).toFixed(2);
 
-    // Genera la firma local
-    const cadena = `${API_KEY}~${merchant_id}~${reference_sale}~${valor}~${currency}~${state_pol}`;
-    const firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");//
 
+    let firmaLocal;
+    if (process.env.NODE_ENV === "development") {
+      firmaLocal = data.sign; // Para pruebas con Postman
+    } else {
+      const cadena = `${API_KEY}~${merchant_id}~${reference_sale}~${valor}~${currency}~${state_pol}`;
+      firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");
+    }
+    
     // Compara las firmas
     if (firmaLocal !== firmaPayU) {
       console.warn("❌ Firma digital inválida. Webhook no confiable.");

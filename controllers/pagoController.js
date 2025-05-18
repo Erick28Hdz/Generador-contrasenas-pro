@@ -14,13 +14,13 @@ async function recibirConfirmacionPayU(req, res) {
     const API_KEY = process.env.PAYU_API_KEY;
     const MERCHANT_ID = process.env.PAYU_MERCHANT_ID;
     const reference_sale = data.reference_sale;
-    const valor = Number(data.value).toFixed(2);  // Asegura formato correcto
+    const value = Number(data.value).toFixed(2);  // Asegura formato correcto
     const currency = data.currency;
     const state_pol = data.state_pol;
     // 🧾 Asignar la firma enviada por PayU
     const firmaPayU = data.sign;
 
-    const cadena = `${API_KEY}~${MERCHANT_ID}~${reference_sale}~${valor}~${currency}~${state_pol}`;
+    const cadena = `${API_KEY}~${MERCHANT_ID}~${reference_sale}~${value}~${currency}~${state_pol}`;
     firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");
 
     // Compara las firmas

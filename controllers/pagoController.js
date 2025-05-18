@@ -26,8 +26,13 @@ async function recibirConfirmacionPayU(req, res) {
     const valor = parseFloat(value).toFixed(2);
 
     // Genera la firma local
-    const cadena = `${API_KEY}~${merchant_id}~${reference_sale}~${valor}~${currency}~${state_pol}`;
-    const firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");
+    let firmaLocal;
+    if (process.env.NODE_ENV === "development") {
+      firmaLocal = data.sign; // Para pruebas con Postman
+    } else {
+      const cadena = `${API_KEY}~${merchant_id}~${reference_sale}~${valor}~${currency}~${state_pol}`;
+      firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");
+    }
 
     // Compara las firmas
     if (firmaLocal !== firmaPayU) {

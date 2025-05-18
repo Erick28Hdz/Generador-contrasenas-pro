@@ -164,36 +164,6 @@
     }
   </script>
 
-  <form method="post" action="https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu/">
-    <!-- Datos de tu comercio de pruebas -->
-    <input name="merchantId" type="hidden" value="508029"> <!-- merchantId de pruebas -->
-    <input name="accountId" type="hidden" value="512321"> <!-- accountId de pruebas -->
-
-    <!-- Detalles del producto -->
-    <input name="description" type="hidden" value="Plan Mensual">
-    <input name="referenceCode" type="hidden" value="PLAN_MENSUAL_TEST_011">
-    <input name="amount" type="hidden" value="10000">
-    <input name="tax" type="hidden" value="0">
-    <input name="taxReturnBase" type="hidden" value="0">
-    <input name="currency" type="hidden" value="COP">
-
-    <!-- Firma calculada: md5(apiKey~merchantId~referenceCode~amount~currency) -->
-    <input name="signature" type="hidden" value="743f311cdfe5de4f17168459e5ad3dbd">
-cd
-    <!-- Información del comprador -->
-    <input name="erick hernandez" type="hidden" value="erick.hdz9628@gmail.com">
-
-    <!-- URLs de respuesta y confirmación -->
-    <input name="responseUrl" type="hidden" value="https://generador-contrasenas-pro.onrender.com/api/payu/respuesta">
-    <input name="confirmationUrl" type="hidden" value="https://generador-contrasenas-pro.onrender.com/api/payu/confirmacion">
-
-    <!-- Activar modo prueba -->
-    <input name="test" type="hidden" value="1">
-
-    <!-- Botón para enviar el pago -->
-    <input name="Submit" type="submit" value="Pagar con tarjeta (sandbox)">
-  </form>
-  
 </body>
 
 </html>

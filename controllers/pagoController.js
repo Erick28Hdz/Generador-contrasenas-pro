@@ -12,27 +12,14 @@ async function recibirConfirmacionPayU(req, res) {
     console.log("🧾 Webhook recibido de PayU:", data);
 
     const API_KEY = process.env.PAYU_API_KEY;
+    const MERCHANT_ID = process.env.PAYU_MERCHANT_ID;
+    const reference_sale = data.reference_sale;
+    const valor = Number(data.value).toFixed(2);  // Asegura formato correcto
+    const currency = data.currency;
+    const state_pol = data.state_pol;
 
-    const {
-      merchant_id,
-      reference_sale,
-      value,
-      currency,
-      state_pol,
-      sign: firmaPayU
-    } = data;
-
-    // En algunos casos PayU manda el valor con decimales extra, asegúrate de redondear a dos cifras
-    const valor = parseFloat(value).toFixed(2);
-
-
-    let firmaLocal;
-    if (process.env.NODE_ENV === "production") {
-      firmaLocal = data.sign; // Para pruebas con Postman
-    } else {
-      const cadena = `${API_KEY}~${merchant_id}~${reference_sale}~${valor}~${currency}~${state_pol}`;
-      firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");
-    }
+    const cadena = `${API_KEY}~${MERCHANT_ID}~${reference_sale}~${valor}~${currency}~${state_pol}`;
+    firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");
 
     // Compara las firmas
     if (firmaLocal !== firmaPayU) {

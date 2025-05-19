@@ -20,18 +20,26 @@ async function recibirConfirmacionPayU(req, res) {
     // 🧾 Asignar la firma enviada por PayU
     const firmaPayU = data.sign;
 
-    const cadena = `${API_KEY}~${MERCHANT_ID}~${reference_sale}~${value}~${currency}~${state_pol}`;
+    const cadena = [
+      API_KEY,
+      MERCHANT_ID,
+      reference_sale,
+      value,
+      currency,
+      state_pol
+    ].map(x => x.trim()).join("~");
+
     const firma = crypto.createHash("md5").update(cadena).digest("hex");
-    
+
     console.log("💰 Valor original recibido:", data.value);
     console.log("🔐 Cadena para firma:", cadena);
     console.log("📌 Firma local:", firma);
     console.log("📌 Firma PayU:", firmaPayU);
 
     // Compara las firmas
-    if (firma !== firmaPayU) {
-      console.warn("❌ Firma digital inválida. Webhook no confiable.");
-      return res.status(403).send("❌ Firma digital no válida");
+    if (firma.trim().toLowerCase() !== firmaPayU.trim().toLowerCase()) {
+      console.warn("❌ Firma inválida");
+      return res.status(403).send("Firma no válida");
     }
 
     const estado = data.state_pol;

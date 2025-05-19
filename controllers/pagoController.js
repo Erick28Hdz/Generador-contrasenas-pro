@@ -14,7 +14,7 @@ async function recibirConfirmacionPayU(req, res) {
     const API_KEY = process.env.PAYU_API_KEY;
     const MERCHANT_ID = process.env.PAYU_MERCHANT_ID;
     const reference_sale = data.reference_sale;
-    const value = Number(data.value).toFixed(2);  // Asegura formato correcto
+    const value = parseFloat(data.value).toFixed(2);  // Asegura formato correcto
     const currency = data.currency;
     const state_pol = data.state_pol;
     // 🧾 Asignar la firma enviada por PayU
@@ -22,7 +22,8 @@ async function recibirConfirmacionPayU(req, res) {
 
     const cadena = `${API_KEY}~${MERCHANT_ID}~${reference_sale}~${value}~${currency}~${state_pol}`;
     const firma = crypto.createHash("md5").update(cadena).digest("hex");
-
+    
+    console.log("💰 Valor original recibido:", data.value);
     console.log("🔐 Cadena para firma:", cadena);
     console.log("📌 Firma local:", firma);
     console.log("📌 Firma PayU:", firmaPayU);

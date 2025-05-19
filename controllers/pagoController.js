@@ -13,33 +13,28 @@ async function recibirConfirmacionPayU(req, res) {
 
     const API_KEY = process.env.PAYU_API_KEY;
     const MERCHANT_ID = process.env.PAYU_MERCHANT_ID;
-
     const reference_sale = data.reference_sale;
-    const value = parseFloat(data.value).toFixed(1); // ⚠️ Asegura que use un decimal si PayU usa "13000.0"
+    const value = Number(data.value).toFixed(2);  // Asegura formato correcto
     const currency = data.currency;
     const state_pol = data.state_pol;
+    // 🧾 Asignar la firma enviada por PayU
     const firmaPayU = data.sign;
 
-    // Generar la cadena para la firma local
     const cadena = `${API_KEY}~${MERCHANT_ID}~${reference_sale}~${value}~${currency}~${state_pol}`;
-    const firmaLocal = crypto.createHash("md5").update(cadena).digest("hex");
+    const firma = crypto.createHash("md5").update(cadena).digest("hex");
 
-    console.log("🔐 Cadena:", cadena);
-    console.log("📌 Firma Local:", firmaLocal);
+    console.log("🔐 Cadena para firma:", cadena);
+    console.log("📌 Firma local:", firma);
     console.log("📌 Firma PayU:", firmaPayU);
 
-    // Validar la firma
-    if (firmaLocal !== firmaPayU) {
+    // Compara las firmas
+    if (firma !== firmaPayU) {
       console.warn("❌ Firma digital inválida. Webhook no confiable.");
       return res.status(403).send("❌ Firma digital no válida");
     }
 
     const estado = data.state_pol;
     const correo = data.email_buyer || data.buyerEmail || data.payerEmail;
-
-    // Aquí seguiría el resto de tu lógica para actualizar usuarios, membresía, etc.
-    console.log("✅ Webhook válido. Procediendo con la lógica de negocio.");
-    return res.status(200).send("✅ Webhook recibido y verificado");
 
     if (!correo) {
       return res.status(400).send("❌ Correo no especificado");

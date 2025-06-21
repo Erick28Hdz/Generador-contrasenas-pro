@@ -26,6 +26,17 @@ function generarFirmaPayU(data, apiKey, merchantId) {
     String(state_pol)
   ].map(x => x.trim()).join("~");
 
+  console.log("🔐 Cadena para firmar:", cadena); // <- imprime la cadena real usada
+  console.log("📬 Campos individuales:", {
+    apiKey,
+    merchantId,
+    reference_sale,
+    value,
+    monto,
+    currency,
+    state_pol
+  });
+
   const firma = crypto.createHash("md5").update(cadena).digest("hex");
   return firma;
 }

@@ -21,3 +21,5 @@ function generarFirmaPayU(data, apiKey, merchantId) {
 
   return firma;
 }
+
+module.exports = { generarFirmaPayU };

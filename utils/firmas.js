@@ -29,3 +29,5 @@ function generarFirmaPayU(data, apiKey, merchantId) {
   const firma = crypto.createHash("md5").update(cadena).digest("hex");
   return firma;
 }
+
+module.exports = { generarFirmaPayU };

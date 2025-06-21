@@ -1,4 +1,5 @@
 const { generarCodigoPremium } = require("../utils/generarCodigo");
+const { generarFirmaPayU } = require("../utils/firmas");
 const conectarDB = require("../database/db");
 const User = require("../models/user");
 const { enviarCorreoCompra } = require("../api/sendMail");
@@ -11,34 +12,14 @@ async function recibirConfirmacionPayU(req, res) {
     const data = req.body;
     console.log("🧾 Webhook recibido de PayU:", data);
 
-    const API_KEY = process.env.PAYU_API_KEY;
-    const MERCHANT_ID = process.env.PAYU_MERCHANT_ID;
-    const reference_sale = data.reference_sale;
-    const value = parseFloat(data.value).toFixed(2);  // Asegura formato correcto
-    const currency = data.currency;
-    const state_pol = data.state_pol;
-    // 🧾 Asignar la firma enviada por PayU
     const firmaPayU = data.sign;
+    const firmaLocal = generarFirmaPayU(data, process.env.PAYU_API_KEY, process.env.PAYU_MERCHANT_ID);
 
-    const cadena = [
-      API_KEY,
-      MERCHANT_ID,
-      reference_sale,
-      value,
-      currency,
-      state_pol
-    ].map(x => x.trim()).join("~");
-
-    const firma = crypto.createHash("md5").update(cadena).digest("hex");
-
-    console.log("💰 Valor original recibido:", data.value);
-    console.log("🔐 Cadena para firma:", cadena);
-    console.log("📌 Firma local:", firma);
-    console.log("📌 Firma PayU:", firmaPayU);
-
-    // Compara las firmas
-    if (firma.trim().toLowerCase() !== firmaPayU.trim().toLowerCase()) {
+    if (firmaLocal.trim().toLowerCase() !== firmaPayU.trim().toLowerCase()) {
       console.warn("❌ Firma inválida");
+      console.warn("⚠️ Firma esperada:", firmaLocal);
+      console.warn("⚠️ Firma recibida:", firmaPayU);
+      console.warn("📦 Datos completos recibidos:", data);
       return res.status(403).send("Firma no válida");
     }
 

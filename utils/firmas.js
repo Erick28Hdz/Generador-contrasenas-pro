@@ -1,44 +1,23 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 
-/**
- * Genera la firma MD5 para una transacción de PayU
- * @param {Object} data - Datos recibidos de PayU
- * @param {string} apiKey - API KEY de PayU (desde .env)
- * @param {string} merchantId - Merchant ID de PayU (desde .env)
- * @returns {string} Firma MD5 generada localmente
- */
 function generarFirmaPayU(data, apiKey, merchantId) {
-  const {
-    reference_sale,
-    value,
-    currency,
-    state_pol
-  } = data;
-
-  const monto = parseFloat(value).toFixed(2); // Asegura dos decimales exactos
-
-  const cadena = [
-    String(apiKey),
-    String(merchantId),
-    String(reference_sale),
-    String(monto),
-    String(currency),
-    String(state_pol)
-  ].map(x => x.trim()).join("~");
-
-  console.log("🔐 Cadena para firmar:", cadena); // <- imprime la cadena real usada
-  console.log("📬 Campos individuales:", {
-    apiKey,
-    merchantId,
-    reference_sale,
-    value,
-    monto,
-    currency,
-    state_pol
-  });
+  const referenceCode = data.reference_sale?.trim();
+  const transactionState = data.state_pol;
+  const currency = data.currency;
+  
+  // ATENCIÓN: Usar el TX_VALUE tal como lo enviaste originalmente
+  const rawValue = parseFloat(data.value).toFixed(2); // value DEBE coincidir con lo enviado
+  const cadena = [apiKey, merchantId, referenceCode, rawValue, currency, transactionState].join("~");
 
   const firma = crypto.createHash("md5").update(cadena).digest("hex");
+
+  console.log("🧪 Cadena generada:", cadena);
+  console.log("✅ Firma generada:", firma);
+  console.log("❓ Firma esperada (desde webhook):", data.sign);
+
+  if (firma !== data.sign) {
+    console.warn("⚠️ Las firmas NO coinciden. Revisa el valor TX_VALUE.");
+  }
+
   return firma;
 }
-
-module.exports = { generarFirmaPayU };

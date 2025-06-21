@@ -1,5 +1,5 @@
 const { generarCodigoPremium } = require("../utils/generarCodigo");
-const { generarFirmaPayU } = require("../utils/firmas");
+const  generarFirmaPayU  = require("../utils/firmas");
 const conectarDB = require("../database/db");
 const User = require("../models/user");
 const { enviarCorreoCompra } = require("../api/sendMail");

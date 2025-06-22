@@ -65,7 +65,7 @@ async function enviarCorreoRegistro(correo, plan, name) {
                             </a>
                             </td>
                             <td style="padding: 10px;">
-                            <a href="https://biz.payulatam.com/B0fa08c7DB81587" target="_blank" style="text-decoration: none;">
+                            <a href="https://biz.payulatam.com/L0fa08cE186AE98" target="_blank" style="text-decoration: none;">
                                 <img src="https://generador-contrasenas-pro.onrender.com/image/membresia-anual.png" alt="Pago Anual" style="width: 120px;">
                                 <div style="background-color: #2980b9; color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold;">Pagar Anual</div>
                             </a>

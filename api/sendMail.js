@@ -59,7 +59,7 @@ async function enviarCorreoRegistro(correo, plan, name) {
                     <table role="presentation" style="width: 100%; max-width: 600px; margin: 0 auto; text-align: center;">
                         <tr>
                             <td style="padding: 10px;">
-                            <a href="https://biz.payulatam.com/L0fa08cEA503774" target="_blank" style="text-decoration: none;">
+                            <a href="https://biz.payulatam.com/L0fa08cB6734589" target="_blank" style="text-decoration: none;">
                                 <img src="https://generador-contrasenas-pro.onrender.com/image/membresia-mensual.png" alt="Pago Mensual" style="width: 120px;">
                                 <div style="background-color: #27ae60; color: white; padding: 10px 20px; border-radius: 6px; font-weight: bold;">Pagar Mensual</div>
                             </a>

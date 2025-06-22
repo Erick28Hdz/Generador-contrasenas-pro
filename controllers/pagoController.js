@@ -1,9 +1,7 @@
 const { generarCodigoPremium } = require("../utils/generarCodigo");
-const { generarFirmaPayU } = require("../utils/firmas");
 const conectarDB = require("../database/db");
 const User = require("../models/user");
 const { enviarCorreoCompra } = require("../api/sendMail");
-const crypto = require("crypto");
 require('dotenv').config();
 
 async function recibirConfirmacionPayU(req, res) {
@@ -12,18 +10,8 @@ async function recibirConfirmacionPayU(req, res) {
     const data = req.body;
     console.log("🧾 Webhook recibido de PayU:", data);
 
-    const firmaPayU = data.sign;
-    const firmaLocal = generarFirmaPayU(data, process.env.PAYU_API_KEY, process.env.PAYU_MERCHANT_ID);
-
-    if (firmaLocal.trim().toLowerCase() !== firmaPayU.trim().toLowerCase()) {
-      console.warn("❌ Firma inválida");
-      console.warn("⚠️ Firma esperada:", firmaLocal);
-      console.warn("⚠️ Firma recibida:", firmaPayU);
-      console.warn("📦 Datos completos recibidos:", data);
-      return res.status(403).send("Firma no válida");
-    }
-
     const estado = data.state_pol;
+    const mensaje = data.response_message_pol;
     const correo = data.email_buyer || data.buyerEmail || data.payerEmail;
 
     if (!correo) {
@@ -32,7 +20,7 @@ async function recibirConfirmacionPayU(req, res) {
 
     await conectarDB();
 
-    if (estado === "4") {
+    if (estado === "4" && mensaje === "APPROVED") {
       const usuarioExistenteActivo = await User.findOne({ correo, activo: true });
 
       if (usuarioExistenteActivo) {

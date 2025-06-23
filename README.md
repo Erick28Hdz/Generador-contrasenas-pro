@@ -4,10 +4,11 @@ Generador de contraseñas seguras con autenticación por Google, guardado en Goo
 
 ## 🚀 Funcionalidades principales
 
+
 - Generador de contraseñas con:
-  - Longitud personalizada (8-64 caracteres)
-  - Mayúsculas, minúsculas, números y símbolos
-  - Evitar caracteres ambiguos
+- Longitud personalizada (8-64 caracteres)
+- Mayúsculas, minúsculas, números y símbolos
+- Evitar caracteres ambiguos
 - Expiración programada para contraseñas
 - Autenticación con Google (OAuth2)
 - Guardado seguro en Google Sheets con ID único

@@ -36,15 +36,13 @@ router.post("/verificarCodigo", async (req, res) => {
   let duracion;
   if (
     usuario.plan === "Membresía Premium Anual" ||  // Caso para plan anual
-    usuario.plan === "anual" ||
-    usuario.plan ==="Subscripción premium gen-contraseñas-pro"
+    usuario.plan === "Anual"
   ) {
     duracion = 365; // 365 días
   } else if (
     usuario.plan === "Membresía Premium Mensual" || // Caso para plan mensual
-    usuario.plan === "mensual" ||
-    usuario.plan === "Membresía Premium" ||
-    usuario.plan ==="Subscripción básica gen-contraseñas-pro"
+    usuario.plan === "Mensual" ||
+    usuario.plan === "Membresía Premium"
   ) {
     duracion = 30; // 30 días
   } else {

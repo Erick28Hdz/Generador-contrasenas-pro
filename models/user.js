@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   name: String,
   correo: { type: String, required: true, unique: true },
-  plan: { type: String, default: 'prueba' }, // 'prueba', 'mensual', 'anual'
+  plan: { type: String, default: 'Prueba' },
   finPrueba: { type: Date }, 
   pruebaExpirada: { type: Boolean, default: false },
   codigo: String,

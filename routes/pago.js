@@ -19,9 +19,9 @@ router.post('/confirmar', async (req, res) => {
     }
 
     // ✅ Valida que el plan recibido sea permitido (mensual o anual)
-    const planesPermitidos = ['mensual', 'anual'];
+    const planesPermitidos = ['Mensual', 'Anual'];
     if (!planesPermitidos.includes(plan)) {
-        return res.status(400).json({ error: 'El plan debe ser mensual o anual.' });
+        return res.status(400).json({ error: 'El plan debe ser Mensual o Anual.' });
     }
 
     try {
@@ -30,7 +30,7 @@ router.post('/confirmar', async (req, res) => {
 
         // 📅 Calcula la duración del plan en milisegundos
         const ahora = new Date();
-        const duracion = plan === 'anual'
+        const duracion = plan === 'Anual'
             ? 365 * 24 * 60 * 60 * 1000  // 1 año en milisegundos
             : 30 * 24 * 60 * 60 * 1000;  // 30 días en milisegundos
 

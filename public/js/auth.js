@@ -214,7 +214,7 @@ function handleAuthClick() {
                     body: JSON.stringify({
                         correo: email,
                         name: name,
-                        plan: 'prueba'
+                        plan: 'Prueba'
                     }),
                 });
 
@@ -275,10 +275,10 @@ async function obtenerEstadoUsuarioDesdeServidor() {
 
         const { estado, plan, finPremium } = await response.json();
 
-        const esPremium = estado === "premium";
+        const esPremium = estado === "Premium";
         localStorage.setItem("nombreUsuario", name);
         localStorage.setItem("correo", email);
-        localStorage.setItem("planPremium", esPremium ? "premium" : "prueba");
+        localStorage.setItem("planPremium", esPremium ? "Premium" : "Prueba");
         localStorage.setItem("nombrePlan", plan);
         localStorage.setItem("finPremium", finPremium);
 

@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     }
 
     // ✅ Solo permite ciertos planes
-    const planesDisponibles = ['prueba', 'mensual', 'anual'];
+    const planesDisponibles = ['Prueba', 'Mensual', 'Anual'];
     if (!planesDisponibles.includes(plan)) {
         return res.status(400).json({ error: 'Plan no válido.' });
     }
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
 
         if (usuario) {
             // ✏️ Si el usuario ya existe y cambia a un plan de pago, genera código nuevo
-            if (plan !== 'prueba') {
+            if (plan !== 'Prueba') {
                 const codigoGenerado = uuidv4();
                 usuario.plan = plan;
                 usuario.codigo = codigoGenerado;
@@ -109,37 +109,6 @@ router.get('/:correo', async (req, res) => {
     } catch (error) {
         console.error('Error al obtener membresía:', error);
         res.status(500).json({ mensaje: 'Error del servidor' });
-    }
-});
-
-// ✅ Ruta PUT para actualizar plan, fechas y estado premium
-router.put('/:correo', async (req, res) => {
-    const { correo } = req.params;
-    const { plan, activo, inicioPremium, finPremium } = req.body;
-
-    try {
-        const usuario = await Codigo.findOne({ correo });
-
-        if (!usuario) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
-        }
-
-        // Actualizar los campos si están presentes
-        if (plan) usuario.plan = plan;
-        if (activo !== undefined) usuario.activo = activo;
-        if (inicioPremium) usuario.inicioPremium = new Date(inicioPremium);
-        if (finPremium) usuario.finPremium = new Date(finPremium);
-
-        await usuario.save();
-
-        res.json({
-            mensaje: '✅ Usuario actualizado correctamente',
-            usuario
-        });
-
-    } catch (error) {
-        console.error('❌ Error al actualizar el usuario:', error);
-        res.status(500).json({ error: 'Error del servidor al actualizar' });
     }
 });
 

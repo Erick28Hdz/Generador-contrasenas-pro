@@ -24,12 +24,12 @@ router.post('/estadoUsuario', async (req, res) => {
 
     // ✅ Validación de membresía premium
     if (
-      usuario.plan !== 'prueba' &&         // No está en plan prueba
+      usuario.plan !== 'Prueba' &&         // No está en plan prueba
       usuario.finPremium &&                // Tiene una fecha de finalización de premium
       new Date(usuario.finPremium) > hoy   // La membresía sigue vigente
     ) {
       return res.status(200).json({
-        estado: 'premium',
+        estado: 'Premium',
         plan: usuario.plan,
         finPremium: usuario.finPremium,
       });
@@ -44,7 +44,7 @@ router.post('/estadoUsuario', async (req, res) => {
     // ⏳ Si el usuario está dentro de los 7 días de prueba
     if (diasTranscurridos < 7) {
       return res.status(200).json({
-        estado: 'prueba',
+        estado: 'Prueba',
         plan: 'Periodo de prueba',
         finPremium: new Date(
           new Date(fechaInicio).getTime() + 7 * 24 * 60 * 60 * 1000

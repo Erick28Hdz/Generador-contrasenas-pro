@@ -18,7 +18,7 @@ function mostrarTiempoRestante() {
   }
 
   const botonPremium = document.getElementById("botonPremium");
-  if (plan === "premium" && botonPremium) {
+  if (plan === "Premium" && botonPremium) {
     botonPremium.style.display = "none";
   }
 
@@ -34,7 +34,7 @@ function mostrarTiempoRestante() {
     const nombrePlan = localStorage.getItem("nombrePlan") || plan;
 
     if (fin > hoy) {
-      if (plan === 'prueba') {
+      if (plan === 'Prueba') {
         const saludoDiv = document.getElementById("saludoUsuario");
         saludoDiv.innerText = saludo;
         mensaje.innerText = `🧪 Te quedan ${diasRestantes} días de prueba (hasta el ${fin.toLocaleDateString()}).`;
@@ -42,13 +42,13 @@ function mostrarTiempoRestante() {
       } else {
         const saludoDiv = document.getElementById("saludoUsuario");
         saludoDiv.innerText = saludo;
-        mensaje.innerText = `🔓 ${nombrePlan} activo hasta el ${fin.toLocaleDateString()}.`;
+        mensaje.innerText = `🔓 ${nombrePlan} activo hasta el: ${fin.toLocaleDateString()}.`;
         mensaje.style.color = 'green';
       }
     } else {
       const saludoDiv = document.getElementById("saludoUsuario");
       saludoDiv.innerText = saludo;
-      mensaje.innerText = `❌ Tu ${plan === 'prueba' ? 'periodo de prueba' : 'membresía Premium'} ha expirado.`;
+      mensaje.innerText = `❌ Tu ${plan === 'Prueba' ? 'periodo de prueba' : 'membresía Premium'} ha expirado.`;
       mensaje.style.color = 'red';
     }
   }

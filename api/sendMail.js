@@ -80,7 +80,24 @@ async function enviarCorreoRegistro(correo, plan, name) {
                     <hr>
                     <p style="font-size: 11px; color: #95a5a6;">Este correo fue generado automáticamente por Generador PRO. Por favor,
                         no lo reenvíes.</p>
-                </div>`
+                </div>`,
+        attachments: [
+            {
+                filename: 'CONTRATO DE USO Y POLÍTICAS DE SEGURIDAD.PDF',
+                path: path.join(__dirname, '../data/CONTRATO DE USO Y POLÍTICAS DE SEGURIDAD.PDF'),
+                contentType: 'application/pdf'
+            },
+            {
+                filename: 'POLÍTICA DE LICENCIAMIENTO COMERCIAL.pdf',
+                path: path.join(__dirname, '../data/POLÍTICA DE LICENCIAMIENTO COMERCIAL.PDF'),
+                contentType: 'application/pdf'
+            },
+            {
+                filename: 'MANUAL DE USUARIO.pdf',
+                path: path.join(__dirname, '../data/MANUAL DE USUARIO.pdf'),
+                contentType: 'application/pdf'
+            }
+        ]
     };
 
     await transporter.sendMail(mailOptions);

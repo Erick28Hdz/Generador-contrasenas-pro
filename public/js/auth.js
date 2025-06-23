@@ -290,7 +290,17 @@ async function obtenerEstadoUsuarioDesdeServidor() {
             `Hola ${name}, tu plan "${plan}" expira el ${fechaFin}`;
 
         const botonPremium = document.getElementById("botonPremium");
-        if (esPremium && botonPremium) botonPremium.style.display = "none";
+
+        if (botonPremium) {
+            const hoy = new Date();
+            const fin = new Date(finPremium);
+
+            if (esPremium && fin > hoy) {
+                botonPremium.style.display = "none"; // Oculta si es Premium y aún válido
+            } else {
+                botonPremium.style.display = "block"; // Muestra si es prueba o Premium expirado
+            }
+        }
 
         mostrarTiempoRestante();
 

@@ -58,7 +58,7 @@ function mostrarTiempoRestante() {
 async function activarPremiumConCodigo() {
   const codigo = document.getElementById('codigoPremium')?.value.trim() || await mostrarModalInput({
     titulo: '⭐ Código Premium',
-    mensaje: 'Introduce el código premium:',
+    mensaje: 'Introduce el código Premium:',
     placeholder: 'Código Premium...'
   });
 

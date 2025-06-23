@@ -18,27 +18,28 @@ document.getElementById('signout_button').style.visibility = 'hidden';
 
 // Llama al backend para obtener el clientId de Google
 async function obtenerGoogleClientId() {
-    try {
-        const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-config');
-        const data = await response.json();
-        API_KEY = data.apiKey; // Asigna el clientId desde la respuesta del backend
-        console.log("API_KEY:", API_KEY);
+  try {
+    const response = await fetch('https://generador-contrasenas-pro.onrender.com/api/google-config');
+    const data = await response.json();
+    API_KEY = data.apiKey; // Asigna el clientId desde la respuesta del backend
+    console.log("API_KEY:", API_KEY); 
 
-        if (API_KEY) {
+    if (API_KEY) {
+        
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            apiKey: API_KEY,  // Ya tiene el clientId desde el backend
+            scope: SCOPES,
+            callback: '', // Definir el callback cuando se haga login
+        });
 
-            tokenClient = google.accounts.oauth2.initTokenClient({
-                apiKey: API_KEY,  // Ya tiene el clientId desde el backend
-                scope: SCOPES,
-            });
-
-            gisInited = true;
-            maybeEnableButtons(); // Verifica si se pueden habilitar los botones
-        } else {
-            console.error("❌ No se pudo obtener el clientId correctamente");
-        }
-    } catch (err) {
-        console.error('❌ Error al obtener el clientId de Google:', err);
+        gisInited = true;
+        maybeEnableButtons(); // Verifica si se pueden habilitar los botones
+    } else {
+        console.error("❌ No se pudo obtener el clientId correctamente");
     }
+  } catch (err) {
+    console.error('❌ Error al obtener el clientId de Google:', err);
+  }
 }
 
 // Función llamada cuando se carga la librería gapi
@@ -61,6 +62,7 @@ function gisLoaded() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
         scope: SCOPES,
+        callback: '', // El callback se definirá al hacer login
     });
     gisInited = true;          // Marca que GIS está listo
     maybeEnableButtons();      // Verifica si ya se pueden activar los botones
@@ -173,23 +175,12 @@ async function obtenerEmail() {
 
 // Maneja el clic en el botón de inicio de sesión
 function handleAuthClick() {
-    if (!tokenClient) {
-        console.error("tokenClient no está inicializado todavía.");
-        document.getElementById('mensajeBloqueo').innerHTML = '❌ No se pudo iniciar sesión. Intenta más tarde.';
-        return;
-    }
-
     tokenClient.callback = async (resp) => {
-        const mensajeBloqueo = document.getElementById('mensajeBloqueo');
-
         if (resp.error !== undefined) {
-            console.error("Inicio de sesión cancelado o fallido:", resp.error);
-
-            // Mostrar mensaje visible en pantalla
-            mensajeBloqueo.innerHTML = '❌ No se pudo iniciar sesión. Intenta nuevamente.';
-            return;
+            throw (resp);
         }
 
+        // Guarda el access_token en localStorage
         localStorage.setItem('authToken', resp.access_token);
 
         document.getElementById('signout_button').style.visibility = 'visible';
@@ -203,11 +194,14 @@ function handleAuthClick() {
             return;
         }
 
-        const { email, name } = userInfo;
+        const { email, name } = userInfo; // ✅ Guarda nombre para usar luego
 
         try {
+            // 1. Verifica si ya existe un usuario
             const checkUser = await fetch(`https://generador-contrasenas-pro.onrender.com/api/membresia/${encodeURIComponent(email)}`);
+
             if (checkUser.status === 404) {
+                // 2. Si no existe (status 404), lo crea
                 const createUser = await fetch('https://generador-contrasenas-pro.onrender.com/api/membresia/', {
                     method: 'POST',
                     headers: {

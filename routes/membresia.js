@@ -112,4 +112,35 @@ router.get('/:correo', async (req, res) => {
     }
 });
 
+// ✅ Ruta PUT para actualizar plan, fechas y estado premium
+router.put('/:correo', async (req, res) => {
+    const { correo } = req.params;
+    const { plan, activo, inicioPremium, finPremium } = req.body;
+
+    try {
+        const usuario = await Codigo.findOne({ correo });
+
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        // Actualizar los campos si están presentes
+        if (plan) usuario.plan = plan;
+        if (activo !== undefined) usuario.activo = activo;
+        if (inicioPremium) usuario.inicioPremium = new Date(inicioPremium);
+        if (finPremium) usuario.finPremium = new Date(finPremium);
+
+        await usuario.save();
+
+        res.json({
+            mensaje: '✅ Usuario actualizado correctamente',
+            usuario
+        });
+
+    } catch (error) {
+        console.error('❌ Error al actualizar el usuario:', error);
+        res.status(500).json({ error: 'Error del servidor al actualizar' });
+    }
+});
+
 module.exports = router; // Exporta el router para usarlo en app.js o server.js

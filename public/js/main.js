@@ -309,3 +309,47 @@ function mostrarModalInput({ titulo = 'Ingresar dato', mensaje = '', placeholder
     fondo.focus();
   });
 }
+
+function mostrarModalConfirmacion({ titulo = 'Confirmación', mensaje = '', textoBotonConfirmar = 'Aceptar', textoBotonCancelar = 'Cancelar' }) {
+  return new Promise((resolve) => {
+    const fondo = document.createElement('div');
+    fondo.className = 'modal-fondo';
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-contenedor';
+    modal.innerHTML = `
+      <h3>${titulo}</h3>
+      <p>${mensaje}</p>
+      <div class="modal-botones">
+        <button class="modal-aceptar">${textoBotonConfirmar}</button>
+        <button class="modal-cancelar">${textoBotonCancelar}</button>
+      </div>
+    `;
+
+    fondo.appendChild(modal);
+    document.body.appendChild(fondo);
+
+    // Botón confirmar
+    modal.querySelector('.modal-aceptar').addEventListener('click', () => {
+      document.body.removeChild(fondo);
+      resolve(true);
+    });
+
+    // Botón cancelar
+    modal.querySelector('.modal-cancelar').addEventListener('click', () => {
+      document.body.removeChild(fondo);
+      resolve(false);
+    });
+
+    // Cerrar con ESC
+    fondo.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.body.removeChild(fondo);
+        resolve(false);
+      }
+    });
+
+    fondo.tabIndex = 0;
+    fondo.focus();
+  });
+}

@@ -29,7 +29,6 @@ async function obtenerGoogleClientId() {
             tokenClient = google.accounts.oauth2.initTokenClient({
                 apiKey: API_KEY,  // Ya tiene el clientId desde el backend
                 scope: SCOPES,
-                callback: '', // Definir el callback cuando se haga login
             });
 
             gisInited = true;
@@ -62,7 +61,6 @@ function gisLoaded() {
     tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
         scope: SCOPES,
-        callback: '', // El callback se definirá al hacer login
     });
     gisInited = true;          // Marca que GIS está listo
     maybeEnableButtons();      // Verifica si ya se pueden activar los botones
@@ -175,19 +173,29 @@ async function obtenerEmail() {
 
 // Maneja el clic en el botón de inicio de sesión
 function handleAuthClick() {
+    if (!tokenClient) {
+        console.error("tokenClient no está inicializado todavía.");
+        document.getElementById('mensajeBloqueo').innerHTML = '❌ No se pudo iniciar sesión. Intenta más tarde.';
+        return;
+    }
+
     tokenClient.callback = async (resp) => {
+        const mensajeBloqueo = document.getElementById('mensajeBloqueo');
+
         if (resp.error !== undefined) {
-            console.error("Inicio de sesión cancelado o fallido");
-            return; // 🔴 NO continuar si hay error
+            console.error("Inicio de sesión cancelado o fallido:", resp.error);
+
+            // Mostrar mensaje visible en pantalla
+            mensajeBloqueo.innerHTML = '❌ No se pudo iniciar sesión. Intenta nuevamente.';
+            return;
         }
 
-        // ✅ Solo si todo está bien:
         localStorage.setItem('authToken', resp.access_token);
 
         document.getElementById('signout_button').style.visibility = 'visible';
         document.getElementById('authorize_button').style.visibility = 'hidden';
 
-        verificarAutenticacion(); // ✅ Aquí SÍ se llama
+        verificarAutenticacion();
 
         const userInfo = await obtenerEmail();
         if (!userInfo) {
@@ -199,7 +207,6 @@ function handleAuthClick() {
 
         try {
             const checkUser = await fetch(`https://generador-contrasenas-pro.onrender.com/api/membresia/${encodeURIComponent(email)}`);
-
             if (checkUser.status === 404) {
                 const createUser = await fetch('https://generador-contrasenas-pro.onrender.com/api/membresia/', {
                     method: 'POST',

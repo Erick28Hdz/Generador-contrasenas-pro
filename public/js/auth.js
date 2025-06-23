@@ -205,7 +205,7 @@ function handleAuthClick() {
             const checkUser = await fetch(`https://generador-contrasenas-pro.onrender.com/api/membresia/${encodeURIComponent(email)}`);
 
             if (checkUser.status === 404) {
-                // 2. Si no existe (status 404), lo crea
+                // 1. Crear usuario nuevo en el backend
                 const createUser = await fetch('https://generador-contrasenas-pro.onrender.com/api/membresia/', {
                     method: 'POST',
                     headers: {
@@ -219,9 +219,22 @@ function handleAuthClick() {
                 });
 
                 const result = await createUser.json();
-                console.log('Usuario creado:', result);
+                console.log('👤 Usuario creado:', result);
+
+                // 2. Crear automáticamente su Google Sheet con encabezados
+                try {
+                    const newSheetId = await createSpreadsheetAndHeaders();
+                    console.log('📄 Spreadsheet creado automáticamente para el usuario:', newSheetId);
+
+                    // Guarda el ID del archivo en localStorage (opcional, si lo usas luego)
+                    localStorage.setItem('spreadsheetId', newSheetId);
+
+                } catch (sheetError) {
+                    console.error('❌ Error al crear spreadsheet para el nuevo usuario:', sheetError);
+                }
+
             } else {
-                console.log('Usuario ya existe. No se crea de nuevo.');
+                console.log('👤 Usuario ya existe. No se crea de nuevo.');
             }
 
             await obtenerEstadoUsuarioDesdeServidor();

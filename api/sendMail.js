@@ -83,18 +83,18 @@ async function enviarCorreoRegistro(correo, plan, name) {
                 </div>`,
         attachments: [
             {
-                filename: 'CONTRATO DE USO Y POLÍTICAS DE SEGURIDAD.PDF',
-                path: path.join(__dirname, '../data/CONTRATO DE USO Y POLÍTICAS DE SEGURIDAD.PDF'),
+                filename: 'contrato-de-uso-y-politicas-de-seguridad.pdf',
+                path: path.join(__dirname, '../data/contrato-de-uso-y-politicas-de-seguridad.pdf'),
                 contentType: 'application/pdf'
             },
             {
-                filename: 'POLÍTICA DE LICENCIAMIENTO COMERCIAL.pdf',
-                path: path.join(__dirname, '../data/POLÍTICA DE LICENCIAMIENTO COMERCIAL.PDF'),
+                filename: 'politica-de-licenciamiento-comercial.pdf',
+                path: path.join(__dirname, '../data/politica-de-licenciamiento-comercial.pdf'),
                 contentType: 'application/pdf'
             },
             {
-                filename: 'MANUAL DE USUARIO.pdf',
-                path: path.join(__dirname, '../data/MANUAL DE USUARIO.pdf'),
+                filename: 'manual-de-usuario.pdf',
+                path: path.join(__dirname, '../data/manual-de-usuario.pdf'),
                 contentType: 'application/pdf'
             }
         ]
